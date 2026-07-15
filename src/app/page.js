@@ -1,65 +1,380 @@
-import Image from "next/image";
+'use client';
+
+import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { useCart } from '@/context/CartContext';
+import { Sparkles, Leaf, ArrowRight, ShieldCheck, Heart, RefreshCw, Zap, ShoppingBag } from 'lucide-react';
+
+// Fallback data in case database is not initialized yet
+const localFallbackProducts = [
+  {
+    _id: "seed-orange",
+    name: "Orange & Vitamin C Face Wash",
+    productId: "MH104767012A",
+    category: "Face Wash",
+    images: [],
+    description: "Orange & Vitamin C Face Wash is formulated for deep skin refreshing and pimple cleansing. Packed with Vitamin C and natural fruit extracts.",
+    weight: "100 ML",
+    price: 299,
+    discountPrice: 249,
+    stock: 50
+  },
+  {
+    _id: "seed-aloe",
+    name: "Aloe Cucumber Face Wash",
+    productId: "MH104767013A",
+    category: "Face Wash",
+    images: [],
+    description: "Aloe Cucumber Face Wash combines the healing properties of Aloe Vera with the cooling sensation of fresh Cucumber. Deeply hydrates.",
+    weight: "100 ML",
+    price: 299,
+    discountPrice: 249,
+    stock: 45
+  },
+  {
+    _id: "seed-ubtan",
+    name: "Keshar Ubtan Face Wash",
+    productId: "MH104767015A",
+    category: "Face Wash",
+    images: [],
+    description: "Keshar Ubtan Face Wash brings the traditional Indian Ubtan recipe into a convenient wash. Loaded with Saffron and Kumkumadi Oil.",
+    weight: "100 ML",
+    price: 349,
+    discountPrice: 299,
+    stock: 40
+  }
+];
 
 export default function Home() {
+  const { addToCart } = useCart();
+  const [products, setProducts] = useState(localFallbackProducts);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchFeaturedProducts() {
+      try {
+        const res = await fetch('/api/products');
+        const data = await res.json();
+        if (data.success && data.products && data.products.length > 0) {
+          // Take top 3 products
+          setProducts(data.products.slice(0, 3));
+        }
+      } catch (error) {
+        console.log('Using local fallback products during database setup');
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchFeaturedProducts();
+  }, []);
+
+  const categories = [
+    {
+      name: 'Face Wash',
+      description: 'Refreshing, pimple-cleansing formulas for all skin types.',
+      imageBg: 'from-[#C5A880]/20 to-[#3B5F43]/10',
+      link: '/shop?category=Face%20Wash',
+    },
+    {
+      name: 'Creams & Lotions',
+      description: '72-hour moisture and skin-brightening nourishment.',
+      imageBg: 'from-[#3B5F43]/20 to-[#C5A880]/10',
+      link: '/shop?category=Creams%20%26%20Lotions',
+    },
+  ];
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.js file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="flex flex-col w-full font-sans bg-[#FDFBF7]">
+      
+      {/* 1. Hero Section */}
+      <section className="relative overflow-hidden bg-gradient-to-b from-[#EBE3D5]/40 via-[#FDFBF7] to-[#FDFBF7] py-20 lg:py-32">
+        {/* Decorative blur gradients */}
+        <div className="absolute top-1/4 -left-32 w-96 h-96 rounded-full bg-[#3B5F43]/5 blur-3xl pointer-events-none" />
+        <div className="absolute bottom-10 -right-20 w-80 h-80 rounded-full bg-[#C5A880]/10 blur-3xl pointer-events-none" />
+
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            {/* Left Column: Heading and CTA */}
+            <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#3B5F43]/10 text-[#3B5F43] text-xs font-semibold uppercase tracking-wider">
+                <Sparkles className="h-3.5 w-3.5" />
+                Premium Organic Skincare
+              </div>
+              <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-slate-800 leading-tight">
+                Reveal Your <span className="text-[#3B5F43]">Natural</span> <br className="hidden sm:inline" />
+                Radiant & Glowing Skin
+              </h1>
+              <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                Beauti Luuk brings you chemical-conscious skin refreshments. Crafted for all skin types, our botanical face washes, creams, and lotions lock in moisture and clear blemishes.
+              </p>
+              
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                <Link
+                  href="/shop"
+                  className="inline-flex items-center justify-center rounded-md bg-[#3B5F43] hover:bg-[#2A4430] px-8 py-3.5 text-sm font-semibold text-white shadow-md transition-all group"
+                >
+                  Shop Skincare Range
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </Link>
+                <Link
+                  href="/scan"
+                  className="inline-flex items-center justify-center rounded-md border border-slate-300 hover:border-[#C5A880] hover:bg-[#C5A880]/5 px-8 py-3.5 text-sm font-semibold text-slate-700 transition-all"
+                >
+                  Scan Barcode Scanner
+                </Link>
+              </div>
+            </div>
+
+            {/* Right Column: Visual Product Label mockup */}
+            <div className="lg:col-span-5 flex justify-center">
+              <div className="relative w-72 h-72 sm:w-96 sm:h-96 rounded-full bg-[#3B5F43]/10 flex items-center justify-center border-2 border-[#EBE3D5] shadow-inner p-8">
+                <div className="w-full h-full rounded-full border-4 border-double border-[#C5A880] bg-white shadow-lg flex flex-col items-center justify-center text-center p-6 select-none animate-fade-in">
+                  <span className="font-serif text-3xl font-bold tracking-widest text-[#1E293B]">B</span>
+                  <span className="font-serif text-xl font-bold tracking-widest text-[#1E293B] mt-1">BEAUTI LUUK</span>
+                  <span className="text-[7px] tracking-[0.2em] text-[#C5A880] font-sans font-bold uppercase mt-1">
+                    Organic Skincare Collection
+                  </span>
+                  <div className="w-16 h-px bg-[#EBE3D5] my-4" />
+                  <p className="text-[10px] text-slate-500 italic max-w-[180px]">
+                    "Har Bund Me Narmi, Har Bond Me Chamak"
+                  </p>
+                  <span className="mt-4 text-[9px] px-2.5 py-1 rounded bg-[#3B5F43]/10 text-[#3B5F43] font-bold tracking-wide uppercase">
+                    100% For All Skin Types
+                  </span>
+                </div>
+                
+                {/* Floating tags */}
+                <div className="absolute -top-4 right-4 bg-white px-3 py-1.5 rounded-full shadow-md text-xs font-semibold text-[#3B5F43] flex items-center gap-1 border border-slate-100">
+                  <Leaf className="h-3.5 w-3.5 text-[#C5A880]" />
+                  Natural Extract
+                </div>
+                <div className="absolute -bottom-2 left-6 bg-white px-3 py-1.5 rounded-full shadow-md text-xs font-semibold text-[#C5A880] flex items-center gap-1 border border-slate-100">
+                  <Heart className="h-3.5 w-3.5 text-[#3B5F43]" />
+                  Cruelty Free
+                </div>
+              </div>
+            </div>
+
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+
+      {/* 2. Core Value Props */}
+      <section className="bg-white py-12 border-y border-[#EBE3D5]">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="flex items-start gap-4">
+              <div className="p-3 bg-[#3B5F43]/10 text-[#3B5F43] rounded-lg flex-shrink-0">
+                <ShieldCheck className="h-6 w-6" />
+              </div>
+              <div>
+                <h3 className="font-serif font-bold text-slate-800">ISO 9001 Certified</h3>
+                <p className="text-xs text-slate-500 mt-1">Strict quality standards in every single batch.</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-4">
+              <div className="p-3 bg-[#3B5F43]/10 text-[#3B5F43] rounded-lg flex-shrink-0">
+                <Leaf className="h-6 w-6" />
+              </div>
+              <div>
+                <h3 className="font-serif font-bold text-slate-800">Botanical Ingredients</h3>
+                <p className="text-xs text-slate-500 mt-1">Harnessing Aloe Vera, Saffron, Amla & Cucumber.</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-4">
+              <div className="p-3 bg-[#3B5F43]/10 text-[#3B5F43] rounded-lg flex-shrink-0">
+                <RefreshCw className="h-6 w-6" />
+              </div>
+              <div>
+                <h3 className="font-serif font-bold text-slate-800">Pimple Cleansing</h3>
+                <p className="text-xs text-slate-500 mt-1">Refreshing formulas to combat acne and blemish lines.</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-4">
+              <div className="p-3 bg-[#3B5F43]/10 text-[#3B5F43] rounded-lg flex-shrink-0">
+                <Zap className="h-6 w-6" />
+              </div>
+              <div>
+                <h3 className="font-serif font-bold text-slate-800">72h Hydration</h3>
+                <p className="text-xs text-slate-500 mt-1">Almond and milk proteins lock in moisture barrier.</p>
+              </div>
+            </div>
+          </div>
         </div>
-      </main>
+      </section>
+
+      {/* 3. Shop by Category */}
+      <section className="py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="font-serif text-3xl font-bold text-slate-800">Shop by Category</h2>
+            <p className="text-sm text-slate-500 mt-2 max-w-md mx-auto">
+              Choose from our curated organic formulations for targeted skin nourishment.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {categories.map((category) => (
+              <div
+                key={category.name}
+                className="relative rounded-2xl overflow-hidden bg-white border border-[#EBE3D5] p-8 sm:p-10 shadow-sm flex flex-col justify-between group hover:shadow-md transition-all"
+              >
+                <div className={`absolute top-0 right-0 w-36 h-36 rounded-bl-full bg-gradient-to-tr ${category.imageBg} opacity-60 group-hover:scale-110 transition-transform`} />
+                <div className="relative z-10 max-w-xs space-y-4">
+                  <h3 className="font-serif text-2xl font-bold text-slate-800">{category.name}</h3>
+                  <p className="text-sm text-slate-500 leading-relaxed">{category.description}</p>
+                </div>
+                <div className="mt-8 relative z-10">
+                  <Link
+                    href={category.link}
+                    className="inline-flex items-center text-sm font-bold text-[#3B5F43] hover:text-[#C5A880] transition-colors"
+                  >
+                    Explore Products
+                    <ArrowRight className="ml-1.5 h-4 w-4" />
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 4. Best Sellers / Featured Products */}
+      <section className="bg-white py-20 border-t border-[#EBE3D5]">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          
+          <div className="flex flex-col sm:flex-row items-center justify-between mb-12 gap-4">
+            <div className="text-center sm:text-left">
+              <h2 className="font-serif text-3xl font-bold text-slate-800">Our Best Sellers</h2>
+              <p className="text-sm text-slate-500 mt-2">
+                Organic skincare items formulated for pristine skin health.
+              </p>
+            </div>
+            <Link
+              href="/shop"
+              className="inline-flex items-center justify-center rounded-md border border-[#3B5F43] text-[#3B5F43] hover:bg-[#3B5F43] hover:text-white px-5 py-2.5 text-sm font-semibold transition-colors"
+            >
+              View Full Shop
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {products.map((product) => (
+              <div
+                key={product._id}
+                className="rounded-xl overflow-hidden border border-[#EBE3D5] bg-[#FDFBF7] shadow-sm flex flex-col group hover:shadow-md transition-all"
+              >
+                {/* Visual Image box */}
+                <Link href={`/product/${product._id}`} className="h-64 w-full bg-white flex items-center justify-center relative overflow-hidden">
+                  <span className="font-serif font-bold text-3xl text-[#C5A880] select-none group-hover:scale-105 transition-transform duration-300">
+                    {product.name.substring(0, 2).toUpperCase()}
+                  </span>
+                  <div className="absolute inset-0 bg-gradient-to-tr from-[#C5A880]/5 to-[#3B5F43]/5 opacity-60" />
+                  
+                  {/* Barcode ID Tag */}
+                  <div className="absolute top-3 left-3 bg-slate-900/90 text-white text-[9px] font-mono px-2 py-0.5 rounded shadow-sm">
+                    ID: {product.productId}
+                  </div>
+                </Link>
+
+                {/* Info Container */}
+                <div className="p-6 flex-1 flex flex-col justify-between">
+                  <div>
+                    <span className="text-[10px] text-[#C5A880] font-bold uppercase tracking-wider">
+                      {product.category}
+                    </span>
+                    <Link href={`/product/${product._id}`} className="block mt-1">
+                      <h3 className="font-serif text-lg font-bold text-slate-800 hover:text-[#C5A880] transition-colors line-clamp-1">
+                        {product.name}
+                      </h3>
+                    </Link>
+                    <p className="mt-2 text-xs text-slate-500 line-clamp-2">
+                      {product.description}
+                    </p>
+                  </div>
+
+                  {/* Pricing and Cart button */}
+                  <div className="mt-6 flex items-center justify-between border-t border-[#EBE3D5]/60 pt-4">
+                    <div>
+                      {product.discountPrice > 0 ? (
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-[#3B5F43] font-bold text-base">₹{product.discountPrice}</span>
+                          <span className="text-slate-400 line-through text-xs">₹{product.price}</span>
+                        </div>
+                      ) : (
+                        <span className="text-[#3B5F43] font-bold text-base">₹{product.price}</span>
+                      )}
+                      <span className="block text-[9px] text-slate-400">Net Vol: {product.weight}</span>
+                    </div>
+
+                    <button
+                      onClick={() => addToCart(product, 1)}
+                      className="inline-flex items-center justify-center p-2.5 rounded-full bg-[#3B5F43] text-white hover:bg-[#2A4430] shadow transition-colors"
+                      title="Add to Cart"
+                    >
+                      <ShoppingBag className="h-4 w-4" />
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+            ))}
+          </div>
+
+        </div>
+      </section>
+
+      {/* 5. Brand Heritage */}
+      <section className="bg-gradient-to-tr from-[#3B5F43]/10 to-[#FDFBF7] py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            {/* Heritage description */}
+            <div className="lg:col-span-6 space-y-6 text-center lg:text-left">
+              <h2 className="font-serif text-3xl font-bold text-slate-800">About Beauti Luuk</h2>
+              <h3 className="text-sm font-semibold tracking-widest text-[#C5A880] uppercase">
+                Har Bund Me Narmi, Har Bond Me Chamak
+              </h3>
+              <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+                Beauti Luuk represents the union of traditional Indian wellness recipes with modern dermatological standards. Every product—from our orange face wash to almond milk lotions—is packed with natural botanicals, certified by ISO & GMP standards, and is 100% cruelty-free. 
+              </p>
+              <p className="text-sm text-slate-500 leading-relaxed">
+                We manufacture under strict laboratory checks (Mfg Lic No: MH/104767A) through Amoha Herbals Pvt. Ltd. to ensure that our skincare formulas deliver long-lasting hydration, smooth out skin blemishes, and improve skin health safely.
+              </p>
+              <div>
+                <Link
+                  href="/about"
+                  className="inline-flex items-center text-sm font-bold text-[#3B5F43] hover:text-[#C5A880] transition-colors"
+                >
+                  Read Our Full Story
+                  <ArrowRight className="ml-1.5 h-4 w-4" />
+                </Link>
+              </div>
+            </div>
+
+            {/* Verification highlights grid */}
+            <div className="lg:col-span-6 flex justify-center">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-white p-6 rounded-xl border border-[#EBE3D5] text-center shadow-sm">
+                  <span className="block font-serif text-3xl font-bold text-[#3B5F43]">100%</span>
+                  <span className="block text-xs font-semibold text-slate-600 mt-1">Made in India</span>
+                </div>
+                <div className="bg-white p-6 rounded-xl border border-[#EBE3D5] text-center shadow-sm">
+                  <span className="block font-serif text-3xl font-bold text-[#3B5F43]">No</span>
+                  <span className="block text-xs font-semibold text-slate-600 mt-1">Animal Testing</span>
+                </div>
+                <div className="bg-white p-6 rounded-xl border border-[#EBE3D5] text-center shadow-sm col-span-2">
+                  <span className="block font-serif text-xl font-bold text-[#C5A880]">GMP Practice</span>
+                  <span className="block text-xs font-semibold text-slate-600 mt-1">Good Manufacturing Standard</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
     </div>
   );
 }
