@@ -3,8 +3,7 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useCart } from '@/context/CartContext';
-import { Search, SlidersHorizontal, ShoppingBag, ArrowUpDown, Tag } from 'lucide-react';
+import { Search, SlidersHorizontal, ArrowUpDown, Tag } from 'lucide-react';
 
 // Hardcoded fallback data in case database is not initialized yet
 const localFallbackCatalog = [
@@ -77,7 +76,6 @@ const localFallbackCatalog = [
 ];
 
 function ShopContent() {
-  const { addToCart } = useCart();
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -367,23 +365,12 @@ function ShopContent() {
                         <span className="block text-[8px] text-slate-400">Net: {product.weight}</span>
                       </div>
 
-                      {product.stock > 0 ? (
-                        <button
-                          onClick={() => addToCart(product, 1)}
-                          className="inline-flex items-center justify-center p-2 rounded-full bg-[#3B5F43] text-white hover:bg-[#2A4430] shadow transition-colors"
-                          title="Add to Cart"
-                        >
-                          <ShoppingBag className="h-4 w-4" />
-                        </button>
-                      ) : (
-                        <button
-                          disabled
-                          className="inline-flex items-center justify-center p-2 rounded-full bg-slate-200 text-slate-400 cursor-not-allowed"
-                          title="Out of Stock"
-                        >
-                          <ShoppingBag className="h-4 w-4" />
-                        </button>
-                      )}
+                      <Link
+                        href={`/product/${product._id}`}
+                        className="inline-flex items-center justify-center rounded-md border border-[#3B5F43] text-[#3B5F43] hover:bg-[#3B5F43] hover:text-white px-3 py-1.5 text-xs font-semibold transition-colors shadow-sm"
+                      >
+                        View Details
+                      </Link>
                     </div>
                   </div>
 

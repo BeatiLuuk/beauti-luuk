@@ -2,8 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useCart } from '@/context/CartContext';
-import { Sparkles, Leaf, ArrowRight, ShieldCheck, Heart, RefreshCw, Zap, ShoppingBag } from 'lucide-react';
+import { Sparkles, Leaf, ArrowRight, ShieldCheck, Heart, RefreshCw, Zap } from 'lucide-react';
 
 // Fallback data in case database is not initialized yet
 const localFallbackProducts = [
@@ -46,7 +45,6 @@ const localFallbackProducts = [
 ];
 
 export default function Home() {
-  const { addToCart } = useCart();
   const [products, setProducts] = useState(localFallbackProducts);
   const [loading, setLoading] = useState(true);
 
@@ -301,17 +299,14 @@ export default function Home() {
                       )}
                       <span className="block text-[9px] text-slate-400">Net Vol: {product.weight}</span>
                     </div>
-
-                    <button
-                      onClick={() => addToCart(product, 1)}
-                      className="inline-flex items-center justify-center p-2.5 rounded-full bg-[#3B5F43] text-white hover:bg-[#2A4430] shadow transition-colors"
-                      title="Add to Cart"
+                    <Link
+                      href={`/product/${product._id}`}
+                      className="inline-flex items-center justify-center rounded-md border border-[#3B5F43] text-[#3B5F43] hover:bg-[#3B5F43] hover:text-white px-3.5 py-1.5 text-xs font-semibold transition-colors shadow-sm"
                     >
-                      <ShoppingBag className="h-4 w-4" />
-                    </button>
+                      View Details
+                    </Link>
                   </div>
                 </div>
-
               </div>
             ))}
           </div>

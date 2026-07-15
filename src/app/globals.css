@@ -12,8 +12,8 @@
   --color-foreground: var(--foreground);
   --color-primary: var(--primary);
   --color-secondary: var(--secondary);
-  --font-serif: var(--font-serif);
-  --font-sans: var(--font-sans);
+  --font-serif: "Playfair Display", Georgia, serif;
+  --font-sans: "Outfit", system-ui, sans-serif;
 }
 
 body {
