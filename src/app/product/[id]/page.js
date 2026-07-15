@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Phone, ArrowLeft, ShieldAlert, Award, Heart, CheckCircle2, ChevronRight } from 'lucide-react';
+import { Phone, Share2, QrCode, X, ArrowLeft, ShieldAlert, Award, Heart, CheckCircle2, ChevronRight } from 'lucide-react';
 
 // Hardcoded fallback data in case database is not initialized yet
 const localFallbackCatalog = [
@@ -144,6 +144,9 @@ export default function ProductDetails() {
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('description');
+  const [showCopiedToast, setShowCopiedToast] = useState(false);
+  const [showQrModal, setShowQrModal] = useState(false);
+  const [currentUrl, setCurrentUrl] = useState('');
 
   useEffect(() => {
     async function fetchProductData() {
@@ -207,6 +210,36 @@ export default function ProductDetails() {
 
     fetchProductData();
   }, [id, router]);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setCurrentUrl(window.location.href);
+    }
+  }, [id]);
+
+  const handleShare = async () => {
+    const shareData = {
+      title: product ? product.name : 'Beauti Luuk Skincare',
+      text: product ? `${product.name} - ${product.description.substring(0, 100)}...` : 'Beauti Luuk Organic Skincare',
+      url: window.location.href,
+    };
+
+    if (typeof window !== 'undefined' && navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch (error) {
+        console.log('Error sharing product:', error);
+      }
+    } else {
+      try {
+        await navigator.clipboard.writeText(window.location.href);
+        setShowCopiedToast(true);
+        setTimeout(() => setShowCopiedToast(false), 2000);
+      } catch (err) {
+        console.log('Clipboard copy failed:', err);
+      }
+    }
+  };
 
   if (loading) {
     return (
@@ -318,17 +351,42 @@ export default function ProductDetails() {
             <div className="space-y-4 pt-4">
               {product.stock > 0 ? (
                 <>
-                  <a
-                    href={`https://wa.me/918655550456?text=${encodeURIComponent(
-                      `Hi Beauti Luuk! 🌸\n\nI am interested in ordering the *${product.name}* (${product.weight}).\n\nPrice: ₹${product.discountPrice > 0 ? product.discountPrice : product.price}\n\nPlease guide me on how to proceed with payment and delivery!`
-                    )}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full sm:w-auto inline-flex items-center justify-center rounded-lg bg-[#3B5F43] hover:bg-[#2A4430] text-white px-8 py-3.5 text-sm font-bold shadow-md transition-colors"
-                  >
-                    <Phone className="mr-2 h-4.5 w-4.5 fill-white text-transparent" />
-                    Order via WhatsApp
-                  </a>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <a
+                      href={`https://wa.me/918655550456?text=${encodeURIComponent(
+                        `Hi Beauti Luuk! 🌸\n\nI am interested in ordering the *${product.name}* (${product.weight}).\n\nPrice: ₹${product.discountPrice > 0 ? product.discountPrice : product.price}\n\nPlease guide me on how to proceed with payment and delivery!`
+                      )}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center rounded-lg bg-[#3B5F43] hover:bg-[#2A4430] text-white px-8 py-3.5 text-sm font-bold shadow-md transition-colors"
+                    >
+                      <Phone className="mr-2 h-4.5 w-4.5 fill-white text-transparent" />
+                      Order via WhatsApp
+                    </a>
+
+                    <button
+                      onClick={handleShare}
+                      className="inline-flex items-center justify-center rounded-lg border border-slate-300 hover:border-[#C5A880] hover:text-[#C5A880] text-slate-600 bg-white px-5 py-3.5 text-sm font-semibold transition-all relative"
+                      title="Share Product"
+                    >
+                      <Share2 className="mr-2 h-4.5 w-4.5" />
+                      Share
+                      {showCopiedToast && (
+                        <span className="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-950 text-white text-[10px] px-2.5 py-1 rounded shadow-md whitespace-nowrap animate-fade-in font-sans">
+                          Link copied!
+                        </span>
+                      )}
+                    </button>
+
+                    <button
+                      onClick={() => setShowQrModal(true)}
+                      className="inline-flex items-center justify-center rounded-lg border border-slate-300 hover:border-[#C5A880] hover:text-[#C5A880] text-slate-600 bg-white px-5 py-3.5 text-sm font-semibold transition-all"
+                      title="Show QR Code"
+                    >
+                      <QrCode className="mr-2 h-4.5 w-4.5" />
+                      QR Code
+                    </button>
+                  </div>
                   <p className="text-xs text-[#3B5F43] font-semibold">✓ In Stock (Ships in 24 Hours)</p>
                 </>
               ) : (
@@ -437,6 +495,58 @@ export default function ProductDetails() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      )}
+
+      {/* QR Code Modal Overlay */}
+      {showQrModal && (
+        <div className="fixed inset-0 z-50 overflow-hidden flex items-center justify-center">
+          <div
+            onClick={() => setShowQrModal(false)}
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity animate-fade-in"
+          />
+
+          <div className="relative bg-[#FDFBF7] border border-[#EBE3D5] rounded-2xl p-6 sm:p-8 max-w-sm w-full mx-4 shadow-2xl z-10 text-center space-y-5 animate-scale-in">
+            {/* Header */}
+            <div className="flex items-center justify-between border-b border-[#EBE3D5] pb-3">
+              <span className="font-serif font-bold text-slate-800 text-base">Product QR Code</span>
+              <button
+                onClick={() => setShowQrModal(false)}
+                className="rounded-md p-1.5 text-slate-500 hover:bg-slate-100 hover:text-slate-700 focus:outline-none"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            {/* QR Body */}
+            <div className="py-2 space-y-4">
+              <div className="mx-auto border-2 border-double border-[#C5A880] p-3 bg-white rounded-xl shadow-inner w-48 h-48 flex items-center justify-center">
+                {currentUrl ? (
+                  <img
+                    src={`https://api.qrserver.com/v1/create-qr-code/?size=180x180&color=3B5F43&data=${encodeURIComponent(currentUrl)}`}
+                    alt="Product Details QR Code"
+                    className="w-full h-full object-contain animate-fade-in"
+                  />
+                ) : (
+                  <div className="h-10 w-10 animate-spin rounded-full border-4 border-[#3B5F43] border-t-transparent" />
+                )}
+              </div>
+              <h3 className="font-serif font-bold text-slate-800 text-sm line-clamp-1">{product.name}</h3>
+              <p className="text-xs text-slate-500 leading-relaxed max-w-xs mx-auto">
+                Scan this QR code with your smartphone camera to open this product catalogue page instantly on your phone!
+              </p>
+            </div>
+
+            {/* Done Button */}
+            <div>
+              <button
+                onClick={() => setShowQrModal(false)}
+                className="w-full inline-flex items-center justify-center rounded-lg bg-[#3B5F43] hover:bg-[#2A4430] text-white py-2.5 text-xs font-semibold shadow-sm transition-colors"
+              >
+                Done
+              </button>
+            </div>
           </div>
         </div>
       )}
