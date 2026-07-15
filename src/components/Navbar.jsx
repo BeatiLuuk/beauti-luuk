@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
-import { ShoppingBag, ScanLine, Menu, X, Trash2, Plus, Minus, Home, Sparkles, HelpCircle, PhoneCall } from 'lucide-react';
+import { ShoppingBag, Menu, X, Trash2, Plus, Minus, Home, Sparkles, HelpCircle, PhoneCall } from 'lucide-react';
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -15,7 +15,6 @@ export default function Navbar() {
   const navLinks = [
     { name: 'Home', href: '/', icon: Home },
     { name: 'Shop', href: '/shop', icon: Sparkles },
-    { name: 'Barcode Scanner', href: '/scan', icon: ScanLine },
     { name: 'About Us', href: '/about', icon: HelpCircle },
     { name: 'Contact', href: '/contact', icon: PhoneCall },
   ];
@@ -62,15 +61,6 @@ export default function Navbar() {
           </nav>
 
           <div className="flex items-center space-x-3 sm:space-x-4">
-            <Link
-              href="/scan"
-              className="flex items-center justify-center p-2.5 rounded-full bg-[#3B5F43]/10 text-[#3B5F43] hover:bg-[#3B5F43] hover:text-white transition-all"
-              title="Scan Product Barcode"
-            >
-              <ScanLine className="h-5 w-5" />
-              <span className="hidden lg:block ml-2 text-xs font-semibold">Scan Barcode</span>
-            </Link>
-
             <button
               onClick={() => setIsCartOpen(true)}
               className="relative p-2.5 rounded-full border border-slate-200 hover:border-[#C5A880] hover:text-[#C5A880] transition-all"

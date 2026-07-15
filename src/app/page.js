@@ -117,12 +117,6 @@ export default function Home() {
                   Shop Skincare Range
                   <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </Link>
-                <Link
-                  href="/scan"
-                  className="inline-flex items-center justify-center rounded-md border border-slate-300 hover:border-[#C5A880] hover:bg-[#C5A880]/5 px-8 py-3.5 text-sm font-semibold text-slate-700 transition-all"
-                >
-                  Scan Barcode Scanner
-                </Link>
               </div>
             </div>
 

@@ -59,9 +59,6 @@ export default function Footer() {
               <Link href="/shop" className="hover:text-[#C5A880] transition-colors">Shop Skincare</Link>
             </li>
             <li>
-              <Link href="/scan" className="hover:text-[#C5A880] transition-colors">Barcode Scanner</Link>
-            </li>
-            <li>
               <Link href="/about" className="hover:text-[#C5A880] transition-colors">Our Story (About)</Link>
             </li>
             <li>
