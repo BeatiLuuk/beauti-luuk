@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Award, Leaf, Heart, ShieldCheck, ArrowRight, ShieldAlert } from 'lucide-react';
 
 export default function About() {
@@ -55,12 +56,18 @@ export default function About() {
             </p>
           </div>
 
-          <div className="md:col-span-5 flex justify-center">
-            <div className="w-64 h-64 rounded-2xl border-2 border-double border-[#C5A880] bg-[#FDFBF7] p-8 flex flex-col items-center justify-center text-center shadow-sm select-none">
-              <span className="font-serif text-4xl font-bold text-[#3B5F43] tracking-widest">B</span>
-              <span className="font-serif text-lg font-bold text-slate-800 mt-2">BEAUTI LUUK</span>
-              <div className="w-12 h-px bg-[#EBE3D5] my-3" />
-              <span className="text-[9px] font-bold text-[#C5A880] uppercase tracking-wider">
+          <div className="md:col-span-5 flex justify-center w-full">
+            <div className="w-full max-w-sm aspect-square rounded-2xl border-2 border-double border-[#C5A880] bg-white flex flex-col items-center justify-center text-center shadow-sm select-none animate-fade-in">
+              <Image 
+                src="/images/logo-with-tagline.png" 
+                alt="Beauti Luuk Logo" 
+                width={250}
+                height={125}
+                className="h-44 sm:h-48 w-auto object-contain mb-2"
+                priority
+              />
+              <div className="w-20 h-px bg-[#EBE3D5] my-4" />
+              <span className="text-[10px] font-bold text-[#C5A880] uppercase tracking-wider font-sans">
                 100% For All Skin Types
               </span>
             </div>

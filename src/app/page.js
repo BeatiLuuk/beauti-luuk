@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Sparkles, Leaf, ArrowRight, ShieldCheck, Heart, RefreshCw, Zap } from 'lucide-react';
 
 // Fallback data in case database is not initialized yet
@@ -82,10 +83,13 @@ export default function Home() {
             <div className="lg:col-span-5 flex justify-center">
               <div className="relative w-72 h-72 sm:w-96 sm:h-96 rounded-full bg-[#3B5F43]/10 flex items-center justify-center border-2 border-[#EBE3D5] shadow-inner p-8">
                 <div className="w-full h-full rounded-full border-4 border-double border-[#C5A880] bg-white shadow-lg flex flex-col items-center justify-center text-center p-6 select-none animate-fade-in">
-                  <img 
+                  <Image 
                     src="/images/logo-with-tagline.png" 
                     alt="Beauti Luuk Logo" 
+                    width={220}
+                    height={110}
                     className="h-28 w-auto object-contain mb-2"
+                    priority
                   />
                   <span className="text-[7px] tracking-[0.2em] text-[#C5A880] font-sans font-bold uppercase mt-1">
                     Organic Skincare Collection
@@ -225,10 +229,12 @@ export default function Home() {
                   {/* Visual Image box */}
                   <Link href={`/product/${product._id}`} className="h-80 w-full bg-white flex items-center justify-center relative overflow-hidden group">
                     {product.images && product.images.length > 0 && product.images[0] ? (
-                      <img 
+                      <Image 
                         src={product.images[0]} 
                         alt={product.name} 
-                        className="h-full w-full object-contain group-hover:scale-105 transition-transform duration-300 bg-white"
+                        fill
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                        className="object-contain group-hover:scale-105 transition-transform duration-300 bg-white"
                       />
                     ) : (
                       <>

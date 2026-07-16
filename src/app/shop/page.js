@@ -3,6 +3,7 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Search, SlidersHorizontal, ArrowUpDown, Tag } from 'lucide-react';
 
 function ShopContent() {
@@ -34,10 +35,10 @@ function ShopContent() {
         if (searchQuery) {
           url += `search=${encodeURIComponent(searchQuery)}&`;
         }
-        
+
         const res = await fetch(url);
         const data = await res.json();
-        
+
         if (data.success && data.products) {
           setProducts(data.products);
         } else {
@@ -53,6 +54,22 @@ function ShopContent() {
 
     const timer = setTimeout(() => {
       fetchFilteredProducts();
+      
+      // Update URL query parameters silently without forcing a Next.js navigation refresh
+      if (typeof window !== 'undefined') {
+        const params = new URLSearchParams(window.location.search);
+        if (searchQuery) {
+          params.set('search', searchQuery);
+        } else {
+          params.delete('search');
+        }
+        // Retain category query if active
+        if (activeCategory && activeCategory !== 'All') {
+          params.set('category', activeCategory);
+        }
+        const newPath = `${window.location.pathname}${params.toString() ? '?' + params.toString() : ''}`;
+        window.history.replaceState(null, '', newPath);
+      }
     }, 150); // debounce search query input
 
     return () => clearTimeout(timer);
@@ -60,7 +77,7 @@ function ShopContent() {
 
   const handleCategoryChange = (category) => {
     setActiveCategory(category);
-    
+
     // Update URL params
     const params = new URLSearchParams(searchParams.toString());
     if (category === 'All') {
@@ -74,22 +91,13 @@ function ShopContent() {
   const handleSearchChange = (e) => {
     const val = e.target.value;
     setSearchQuery(val);
-    
-    // Update URL params
-    const params = new URLSearchParams(searchParams.toString());
-    if (val === '') {
-      params.delete('search');
-    } else {
-      params.set('search', val);
-    }
-    router.push(`/shop?${params.toString()}`);
   };
 
   const categories = ['All', 'Face Wash', 'Creams & Lotions'];
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-      
+
       {/* Header and Title */}
       <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-[#EBE3D5] pb-6 mb-8 gap-4">
         <div>
@@ -104,10 +112,10 @@ function ShopContent() {
 
       {/* Main Grid Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-        
+
         {/* Left Column: Filters Sidebar */}
         <div className="space-y-6 lg:sticky lg:top-24 h-fit">
-          
+
           {/* Categories list */}
           <div className="bg-white p-6 rounded-xl border border-[#EBE3D5] shadow-sm">
             <h2 className="font-serif text-lg font-bold text-slate-800 flex items-center mb-4">
@@ -119,11 +127,10 @@ function ShopContent() {
                 <button
                   key={cat}
                   onClick={() => handleCategoryChange(cat)}
-                  className={`px-4 py-2 rounded-md text-left text-sm font-medium transition-all ${
-                    activeCategory === cat
+                  className={`px-4 py-2 rounded-md text-left text-sm font-medium transition-all ${activeCategory === cat
                       ? 'bg-[#3B5F43] text-white'
                       : 'text-slate-600 hover:bg-[#3B5F43]/10 hover:text-[#3B5F43] bg-slate-50'
-                  }`}
+                    }`}
                 >
                   {cat}
                 </button>
@@ -152,7 +159,7 @@ function ShopContent() {
 
         {/* Right Column: Search bar and Products Grid */}
         <div className="lg:col-span-3 space-y-6">
-          
+
           {/* Search Input bar */}
           <div className="relative">
             <Search className="absolute top-3.5 left-4 h-5 w-5 text-slate-400" />
@@ -160,23 +167,30 @@ function ShopContent() {
               type="text"
               value={searchQuery}
               onChange={handleSearchChange}
-              placeholder="Search by name, ingredients, or scan barcode ID..."
+              placeholder="Search products by name, ingredients..."
               className="w-full pl-12 pr-4 py-3 rounded-xl border border-[#EBE3D5] bg-white text-sm text-slate-700 shadow-sm focus:border-[#3B5F43] focus:ring-1 focus:ring-[#3B5F43] focus:outline-none"
             />
           </div>
 
-          {/* Search Result Stats */}
-          {!loading && (
-            <div className="text-xs text-slate-500 flex justify-between items-center">
-              <span>Showing {products.length} products</span>
-              {searchQuery && (
-                <span>Search results for: "<strong>{searchQuery}</strong>"</span>
-              )}
-            </div>
-          )}
+          {/* Search Result Stats / Loading status bar */}
+          <div className="text-xs text-slate-500 flex justify-between items-center h-5">
+            {loading && products.length > 0 ? (
+              <span className="flex items-center gap-1.5 text-[#3B5F43] font-medium">
+                <span className="h-3 w-3 animate-spin rounded-full border-2 border-[#3B5F43] border-t-transparent" />
+                Updating catalog...
+              </span>
+            ) : (
+              <>
+                <span>Showing {products.length} products</span>
+                {searchQuery && (
+                  <span>Search results for: "<strong>{searchQuery}</strong>"</span>
+                )}
+              </>
+            )}
+          </div>
 
           {/* Products Grid Content */}
-          {loading ? (
+          {loading && products.length === 0 ? (
             <div className="flex justify-center py-32">
               <div className="h-10 w-10 animate-spin rounded-full border-4 border-[#3B5F43] border-t-transparent" />
             </div>
@@ -197,7 +211,7 @@ function ShopContent() {
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 transition-all duration-300 ${loading ? 'opacity-60 pointer-events-none' : ''}`}>
               {products.map((product) => (
                 <div
                   key={product._id}
@@ -209,10 +223,12 @@ function ShopContent() {
                     className="h-72 w-full bg-slate-50 flex items-center justify-center relative overflow-hidden"
                   >
                     {product.images && product.images.length > 0 && product.images[0] ? (
-                      <img 
-                        src={product.images[0]} 
-                        alt={product.name} 
-                        className="h-full w-full object-contain group-hover:scale-105 transition-transform duration-300 bg-white"
+                      <Image
+                        src={product.images[0]}
+                        alt={product.name}
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        className="object-contain group-hover:scale-105 transition-transform duration-300 bg-white"
                       />
                     ) : (
                       <>
@@ -222,7 +238,7 @@ function ShopContent() {
                         <div className="absolute inset-0 bg-gradient-to-tr from-[#C5A880]/5 to-[#3B5F43]/5 opacity-60" />
                       </>
                     )}
-                    
+
                     {/* Stock Alert */}
                     {product.stock === 0 ? (
                       <div className="absolute top-3 right-3 bg-slate-500 text-white text-[9px] font-bold px-2 py-0.5 rounded">

@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Phone, Share2, QrCode, X, ArrowLeft, ShieldAlert, Award, Heart, CheckCircle2, ChevronRight } from 'lucide-react';
 
 export default function ProductDetails() {
@@ -136,10 +137,13 @@ export default function ProductDetails() {
         <div className="flex flex-col space-y-6">
           {product.images && product.images.length > 0 && product.images[0] ? (
             <div className="relative bg-white border border-[#EBE3D5] rounded-2xl p-4 shadow-sm w-fit mx-auto flex items-center justify-center overflow-hidden">
-              <img 
+              <Image 
                 src={product.images[0]} 
                 alt={product.name} 
+                width={400}
+                height={500}
                 className="max-h-[500px] w-auto object-contain animate-fade-in"
+                priority
               />
               
               {/* Visual badges overlay */}
@@ -335,10 +339,12 @@ export default function ProductDetails() {
               >
                 <Link href={`/product/${p._id}`} className="h-64 w-full bg-slate-50 flex items-center justify-center relative overflow-hidden">
                   {p.images && p.images.length > 0 && p.images[0] ? (
-                    <img 
+                    <Image 
                       src={p.images[0]} 
                       alt={p.name} 
-                      className="h-full w-full object-contain group-hover:scale-105 transition-transform duration-300 bg-white"
+                      fill
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                      className="object-contain group-hover:scale-105 transition-transform duration-300 bg-white"
                     />
                   ) : (
                     <>
