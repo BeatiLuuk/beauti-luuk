@@ -82,16 +82,16 @@ export default function Home() {
             <div className="lg:col-span-5 flex justify-center">
               <div className="relative w-72 h-72 sm:w-96 sm:h-96 rounded-full bg-[#3B5F43]/10 flex items-center justify-center border-2 border-[#EBE3D5] shadow-inner p-8">
                 <div className="w-full h-full rounded-full border-4 border-double border-[#C5A880] bg-white shadow-lg flex flex-col items-center justify-center text-center p-6 select-none animate-fade-in">
-                  <span className="font-serif text-3xl font-bold tracking-widest text-[#1E293B]">B</span>
-                  <span className="font-serif text-xl font-bold tracking-widest text-[#1E293B] mt-1">BEAUTI LUUK</span>
+                  <img 
+                    src="/images/logo-with-tagline.png" 
+                    alt="Beauti Luuk Logo" 
+                    className="h-28 w-auto object-contain mb-2"
+                  />
                   <span className="text-[7px] tracking-[0.2em] text-[#C5A880] font-sans font-bold uppercase mt-1">
                     Organic Skincare Collection
                   </span>
                   <div className="w-16 h-px bg-[#EBE3D5] my-4" />
-                  <p className="text-[10px] text-slate-500 italic max-w-[180px]">
-                    "Har Bund Me Narmi, Har Bond Me Chamak"
-                  </p>
-                  <span className="mt-4 text-[9px] px-2.5 py-1 rounded bg-[#3B5F43]/10 text-[#3B5F43] font-bold tracking-wide uppercase">
+                  <span className="text-[9px] px-2.5 py-1 rounded bg-[#3B5F43]/10 text-[#3B5F43] font-bold tracking-wide uppercase">
                     100% For All Skin Types
                   </span>
                 </div>
@@ -223,16 +223,21 @@ export default function Home() {
                   className="rounded-xl overflow-hidden border border-[#EBE3D5] bg-[#FDFBF7] shadow-sm flex flex-col group hover:shadow-md transition-all"
                 >
                   {/* Visual Image box */}
-                  <Link href={`/product/${product._id}`} className="h-64 w-full bg-white flex items-center justify-center relative overflow-hidden">
-                    <span className="font-serif font-bold text-3xl text-[#C5A880] select-none group-hover:scale-105 transition-transform duration-300">
-                      {product.name.substring(0, 2).toUpperCase()}
-                    </span>
-                    <div className="absolute inset-0 bg-gradient-to-tr from-[#C5A880]/5 to-[#3B5F43]/5 opacity-60" />
-                    
-                    {/* Barcode ID Tag */}
-                    <div className="absolute top-3 left-3 bg-slate-900/90 text-white text-[9px] font-mono px-2 py-0.5 rounded shadow-sm">
-                      ID: {product.productId}
-                    </div>
+                  <Link href={`/product/${product._id}`} className="h-80 w-full bg-white flex items-center justify-center relative overflow-hidden group">
+                    {product.images && product.images.length > 0 && product.images[0] ? (
+                      <img 
+                        src={product.images[0]} 
+                        alt={product.name} 
+                        className="h-full w-full object-contain group-hover:scale-105 transition-transform duration-300 bg-white"
+                      />
+                    ) : (
+                      <>
+                        <span className="font-serif font-bold text-3xl text-[#C5A880] select-none group-hover:scale-105 transition-transform duration-300">
+                          {product.name.substring(0, 2).toUpperCase()}
+                        </span>
+                        <div className="absolute inset-0 bg-gradient-to-tr from-[#C5A880]/5 to-[#3B5F43]/5 opacity-60" />
+                      </>
+                    )}
                   </Link>
 
                   {/* Info Container */}

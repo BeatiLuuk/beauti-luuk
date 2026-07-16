@@ -206,18 +206,23 @@ function ShopContent() {
                   {/* Image container */}
                   <Link
                     href={`/product/${product._id}`}
-                    className="h-56 w-full bg-slate-50 flex items-center justify-center relative overflow-hidden"
+                    className="h-72 w-full bg-slate-50 flex items-center justify-center relative overflow-hidden"
                   >
-                    <span className="font-serif font-bold text-2xl text-[#C5A880] select-none group-hover:scale-105 transition-transform duration-300">
-                      {product.name.substring(0, 2).toUpperCase()}
-                    </span>
-                    <div className="absolute inset-0 bg-gradient-to-tr from-[#C5A880]/5 to-[#3B5F43]/5 opacity-60" />
+                    {product.images && product.images.length > 0 && product.images[0] ? (
+                      <img 
+                        src={product.images[0]} 
+                        alt={product.name} 
+                        className="h-full w-full object-contain group-hover:scale-105 transition-transform duration-300 bg-white"
+                      />
+                    ) : (
+                      <>
+                        <span className="font-serif font-bold text-2xl text-[#C5A880] select-none group-hover:scale-105 transition-transform duration-300">
+                          {product.name.substring(0, 2).toUpperCase()}
+                        </span>
+                        <div className="absolute inset-0 bg-gradient-to-tr from-[#C5A880]/5 to-[#3B5F43]/5 opacity-60" />
+                      </>
+                    )}
                     
-                    {/* Barcode Overlay Tag */}
-                    <div className="absolute bottom-3 left-3 bg-slate-900/90 text-white text-[8px] font-mono px-2 py-0.5 rounded shadow-sm">
-                      ID: {product.productId}
-                    </div>
-
                     {/* Stock Alert */}
                     {product.stock === 0 ? (
                       <div className="absolute top-3 right-3 bg-slate-500 text-white text-[9px] font-bold px-2 py-0.5 rounded">

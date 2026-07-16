@@ -33,13 +33,12 @@ export default function Navbar() {
           </button>
 
           {/* Logo Brand Header */}
-          <Link href="/" className="flex flex-col items-center text-center">
-            <span className="font-serif text-2xl font-bold tracking-widest text-[#1E293B] hover:text-[#C5A880] transition-colors">
-              BEAUTI LUUK
-            </span>
-            <span className="hidden sm:block text-[8px] tracking-[0.25em] text-[#C5A880] font-sans font-semibold uppercase">
-              Khoobsurti Aur Khushboo Naye Andaz Mai
-            </span>
+          <Link href="/" className="flex items-center">
+            <img 
+              src="/images/logo.png" 
+              alt="Beauti Luuk Logo" 
+              className="h-16 sm:h-20 w-auto object-contain py-1"
+            />
           </Link>
 
           {/* Desktop Navigation Links */}
@@ -87,10 +86,14 @@ export default function Navbar() {
             <div className="w-screen max-w-xs transform bg-[#FDFBF7] shadow-2xl transition-all duration-200">
               <div className="flex h-full flex-col py-6">
                 
-                <div className="flex items-center justify-between px-6 border-b border-[#EBE3D5] pb-5 bg-white">
-                  <span className="font-serif text-lg font-bold tracking-wider text-slate-800">
-                    BEAUTI LUUK
-                  </span>
+                <div className="flex items-center justify-between px-6 border-b border-[#EBE3D5] pb-4 bg-white">
+                  <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center">
+                    <img 
+                      src="/images/logo.png" 
+                      alt="Beauti Luuk Logo" 
+                      className="h-10 w-auto object-contain"
+                    />
+                  </Link>
                   <button
                     onClick={() => setIsMobileMenuOpen(false)}
                     className="rounded-md p-1 text-slate-500 hover:bg-slate-100"

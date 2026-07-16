@@ -134,29 +134,34 @@ export default function ProductDetails() {
         
         {/* Left Column: Product Image Display with initials */}
         <div className="flex flex-col space-y-6">
-          <div className="aspect-square rounded-2xl bg-white border border-[#EBE3D5] flex items-center justify-center relative overflow-hidden shadow-sm">
-            <span className="font-serif font-bold text-6xl text-[#C5A880] select-none">
-              {product.name.substring(0, 2).toUpperCase()}
-            </span>
-            <div className="absolute inset-0 bg-gradient-to-tr from-[#C5A880]/5 to-[#3B5F43]/5 opacity-60" />
-            
-            {/* Visual badges overlay */}
-            <div className="absolute bottom-6 right-6 flex flex-col gap-2 items-end">
-              <span className="bg-white/95 backdrop-blur-sm border border-slate-100 shadow-sm rounded-full px-3 py-1 text-[10px] font-bold text-[#3B5F43] flex items-center gap-1 uppercase tracking-wider">
-                <Heart className="h-3.5 w-3.5 fill-[#3B5F43] text-transparent" />
-                Cruelty Free
-              </span>
-              <span className="bg-white/95 backdrop-blur-sm border border-slate-100 shadow-sm rounded-full px-3 py-1 text-[10px] font-bold text-[#C5A880] flex items-center gap-1 uppercase tracking-wider">
-                <Award className="h-3.5 w-3.5" />
-                GMP Certified
-              </span>
+          {product.images && product.images.length > 0 && product.images[0] ? (
+            <div className="relative bg-white border border-[#EBE3D5] rounded-2xl p-4 shadow-sm w-fit mx-auto flex items-center justify-center overflow-hidden">
+              <img 
+                src={product.images[0]} 
+                alt={product.name} 
+                className="max-h-[500px] w-auto object-contain animate-fade-in"
+              />
+              
+              {/* Visual badges overlay */}
+              <div className="absolute bottom-4 right-4 flex flex-col gap-1.5 items-end">
+                <span className="bg-white/95 backdrop-blur-sm border border-slate-100 shadow-sm rounded-full px-2 py-0.5 text-[8px] font-bold text-[#3B5F43] flex items-center gap-1 uppercase tracking-wider">
+                  <Heart className="h-3 w-3 fill-[#3B5F43] text-transparent" />
+                  Cruelty Free
+                </span>
+                <span className="bg-white/95 backdrop-blur-sm border border-slate-100 shadow-sm rounded-full px-2 py-0.5 text-[8px] font-bold text-[#C5A880] flex items-center gap-1 uppercase tracking-wider">
+                  <Award className="h-3 w-3" />
+                  GMP Certified
+                </span>
+              </div>
             </div>
-            
-            {/* Barcode ID Display */}
-            <div className="absolute top-6 left-6 bg-slate-900 text-white font-mono text-xs px-3 py-1 rounded shadow-md border border-slate-700">
-              Barcode: {product.productId}
+          ) : (
+            <div className="aspect-square rounded-2xl bg-white border border-[#EBE3D5] flex items-center justify-center relative overflow-hidden shadow-sm">
+              <span className="font-serif font-bold text-6xl text-[#C5A880] select-none">
+                {product.name.substring(0, 2).toUpperCase()}
+              </span>
+              <div className="absolute inset-0 bg-gradient-to-tr from-[#C5A880]/5 to-[#3B5F43]/5 opacity-60" />
             </div>
-          </div>
+          )}
           
           {/* Quality Certifications Ribbon */}
           <div className="grid grid-cols-3 gap-4 text-center bg-[#3B5F43]/5 rounded-xl border border-[#EBE3D5]/50 p-4">
@@ -196,9 +201,15 @@ export default function ProductDetails() {
               )}
             </div>
             
-            {/* Weight specs */}
-            <div className="text-sm text-slate-500">
-              Net Weight / Volume: <strong className="text-slate-800">{product.weight}</strong>
+            {/* Weight & Barcode specs */}
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-slate-500">
+              <div>
+                Net Weight: <strong className="text-slate-800">{product.weight}</strong>
+              </div>
+              <div className="hidden sm:block w-px h-3.5 bg-[#EBE3D5]" />
+              <div>
+                SKU / Barcode: <strong className="text-slate-800 font-mono text-xs">{product.productId}</strong>
+              </div>
             </div>
 
             <div className="w-full h-px bg-[#EBE3D5] my-6" />
@@ -322,11 +333,21 @@ export default function ProductDetails() {
                 key={p._id}
                 className="rounded-xl overflow-hidden border border-[#EBE3D5] bg-white shadow-sm flex flex-col group hover:shadow-md transition-all duration-200"
               >
-                <Link href={`/product/${p._id}`} className="h-48 w-full bg-slate-50 flex items-center justify-center relative">
-                  <span className="font-serif font-bold text-xl text-[#C5A880]">
-                    {p.name.substring(0, 2).toUpperCase()}
-                  </span>
-                  <div className="absolute inset-0 bg-gradient-to-tr from-[#C5A880]/5 to-[#3B5F43]/5 opacity-60" />
+                <Link href={`/product/${p._id}`} className="h-64 w-full bg-slate-50 flex items-center justify-center relative overflow-hidden">
+                  {p.images && p.images.length > 0 && p.images[0] ? (
+                    <img 
+                      src={p.images[0]} 
+                      alt={p.name} 
+                      className="h-full w-full object-contain group-hover:scale-105 transition-transform duration-300 bg-white"
+                    />
+                  ) : (
+                    <>
+                      <span className="font-serif font-bold text-xl text-[#C5A880]">
+                        {p.name.substring(0, 2).toUpperCase()}
+                      </span>
+                      <div className="absolute inset-0 bg-gradient-to-tr from-[#C5A880]/5 to-[#3B5F43]/5 opacity-60" />
+                    </>
+                  )}
                 </Link>
                 <div className="p-4 flex-1 flex flex-col justify-between">
                   <div>

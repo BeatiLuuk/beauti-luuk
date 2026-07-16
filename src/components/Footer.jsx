@@ -37,9 +37,13 @@ export default function Footer() {
         
         {/* Info Column */}
         <div className="flex flex-col space-y-4">
-          <span className="font-serif text-xl font-bold tracking-widest text-white">
-            BEAUTI LUUK
-          </span>
+          <Link href="/">
+            <img 
+              src="/images/logo.png" 
+              alt="Beauti Luuk Logo" 
+              className="h-12 w-auto object-contain bg-white/95 p-1 rounded border border-[#EBE3D5] w-fit"
+            />
+          </Link>
           <p className="text-xs tracking-wider text-[#C5A880] uppercase font-semibold">
             Khoobsurti Aur Khushboo Naye Andaz Mai
           </p>
