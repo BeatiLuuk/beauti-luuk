@@ -5,65 +5,25 @@ import Link from 'next/link';
 import { Sparkles, Leaf, ArrowRight, ShieldCheck, Heart, RefreshCw, Zap } from 'lucide-react';
 
 // Fallback data in case database is not initialized yet
-const localFallbackProducts = [
-  {
-    _id: "seed-orange",
-    name: "Orange & Vitamin C Face Wash",
-    productId: "MH104767012A",
-    category: "Face Wash",
-    images: [],
-    description: "Orange & Vitamin C Face Wash is formulated for deep skin refreshing and pimple cleansing. Packed with Vitamin C and natural fruit extracts.",
-    weight: "100 ML",
-    price: 299,
-    discountPrice: 249,
-    stock: 50
-  },
-  {
-    _id: "seed-aloe",
-    name: "Aloe Cucumber Face Wash",
-    productId: "MH104767013A",
-    category: "Face Wash",
-    images: [],
-    description: "Aloe Cucumber Face Wash combines the healing properties of Aloe Vera with the cooling sensation of fresh Cucumber. Deeply hydrates.",
-    weight: "100 ML",
-    price: 299,
-    discountPrice: 249,
-    stock: 45
-  },
-  {
-    _id: "seed-ubtan",
-    name: "Keshar Ubtan Face Wash",
-    productId: "MH104767015A",
-    category: "Face Wash",
-    images: [],
-    description: "Keshar Ubtan Face Wash brings the traditional Indian Ubtan recipe into a convenient wash. Loaded with Saffron and Kumkumadi Oil.",
-    weight: "100 ML",
-    price: 349,
-    discountPrice: 299,
-    stock: 40
-  }
-];
-
 export default function Home() {
-  const [products, setProducts] = useState(localFallbackProducts);
+  const [featuredProducts, setFeaturedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchFeaturedProducts() {
+    async function fetchFeatured() {
       try {
         const res = await fetch('/api/products');
         const data = await res.json();
         if (data.success && data.products && data.products.length > 0) {
-          // Take top 3 products
-          setProducts(data.products.slice(0, 3));
+          setFeaturedProducts(data.products.slice(0, 3));
         }
       } catch (error) {
-        console.log('Using local fallback products during database setup');
+        console.log('Error fetching database products:', error);
       } finally {
         setLoading(false);
       }
     }
-    fetchFeaturedProducts();
+    fetchFeatured();
   }, []);
 
   const categories = [
@@ -251,65 +211,81 @@ export default function Home() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {products.map((product) => (
-              <div
-                key={product._id}
-                className="rounded-xl overflow-hidden border border-[#EBE3D5] bg-[#FDFBF7] shadow-sm flex flex-col group hover:shadow-md transition-all"
-              >
-                {/* Visual Image box */}
-                <Link href={`/product/${product._id}`} className="h-64 w-full bg-white flex items-center justify-center relative overflow-hidden">
-                  <span className="font-serif font-bold text-3xl text-[#C5A880] select-none group-hover:scale-105 transition-transform duration-300">
-                    {product.name.substring(0, 2).toUpperCase()}
-                  </span>
-                  <div className="absolute inset-0 bg-gradient-to-tr from-[#C5A880]/5 to-[#3B5F43]/5 opacity-60" />
-                  
-                  {/* Barcode ID Tag */}
-                  <div className="absolute top-3 left-3 bg-slate-900/90 text-white text-[9px] font-mono px-2 py-0.5 rounded shadow-sm">
-                    ID: {product.productId}
-                  </div>
-                </Link>
-
-                {/* Info Container */}
-                <div className="p-6 flex-1 flex flex-col justify-between">
-                  <div>
-                    <span className="text-[10px] text-[#C5A880] font-bold uppercase tracking-wider">
-                      {product.category}
+          {loading ? (
+            <div className="flex justify-center py-12">
+              <div className="h-10 w-10 animate-spin rounded-full border-4 border-[#3B5F43] border-t-transparent" />
+            </div>
+          ) : featuredProducts.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {featuredProducts.map((product) => (
+                <div
+                  key={product._id}
+                  className="rounded-xl overflow-hidden border border-[#EBE3D5] bg-[#FDFBF7] shadow-sm flex flex-col group hover:shadow-md transition-all"
+                >
+                  {/* Visual Image box */}
+                  <Link href={`/product/${product._id}`} className="h-64 w-full bg-white flex items-center justify-center relative overflow-hidden">
+                    <span className="font-serif font-bold text-3xl text-[#C5A880] select-none group-hover:scale-105 transition-transform duration-300">
+                      {product.name.substring(0, 2).toUpperCase()}
                     </span>
-                    <Link href={`/product/${product._id}`} className="block mt-1">
-                      <h3 className="font-serif text-lg font-bold text-slate-800 hover:text-[#C5A880] transition-colors line-clamp-1">
-                        {product.name}
-                      </h3>
-                    </Link>
-                    <p className="mt-2 text-xs text-slate-500 line-clamp-2">
-                      {product.description}
-                    </p>
-                  </div>
-
-                  {/* Pricing and Cart button */}
-                  <div className="mt-6 flex items-center justify-between border-t border-[#EBE3D5]/60 pt-4">
-                    <div>
-                      {product.discountPrice > 0 ? (
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-[#3B5F43] font-bold text-base">₹{product.discountPrice}</span>
-                          <span className="text-slate-400 line-through text-xs">₹{product.price}</span>
-                        </div>
-                      ) : (
-                        <span className="text-[#3B5F43] font-bold text-base">₹{product.price}</span>
-                      )}
-                      <span className="block text-[9px] text-slate-400">Net Vol: {product.weight}</span>
+                    <div className="absolute inset-0 bg-gradient-to-tr from-[#C5A880]/5 to-[#3B5F43]/5 opacity-60" />
+                    
+                    {/* Barcode ID Tag */}
+                    <div className="absolute top-3 left-3 bg-slate-900/90 text-white text-[9px] font-mono px-2 py-0.5 rounded shadow-sm">
+                      ID: {product.productId}
                     </div>
-                    <Link
-                      href={`/product/${product._id}`}
-                      className="inline-flex items-center justify-center rounded-md border border-[#3B5F43] text-[#3B5F43] hover:bg-[#3B5F43] hover:text-white px-3.5 py-1.5 text-xs font-semibold transition-colors shadow-sm"
-                    >
-                      View Details
-                    </Link>
+                  </Link>
+
+                  {/* Info Container */}
+                  <div className="p-6 flex-1 flex flex-col justify-between">
+                    <div>
+                      <span className="text-[10px] text-[#C5A880] font-bold uppercase tracking-wider">
+                        {product.category}
+                      </span>
+                      <Link href={`/product/${product._id}`} className="block mt-1">
+                        <h3 className="font-serif text-lg font-bold text-slate-800 hover:text-[#C5A880] transition-colors line-clamp-1">
+                          {product.name}
+                        </h3>
+                      </Link>
+                      <p className="mt-2 text-xs text-slate-500 line-clamp-2">
+                        {product.description}
+                      </p>
+                    </div>
+
+                    {/* Pricing and Cart button */}
+                    <div className="mt-6 flex items-center justify-between border-t border-[#EBE3D5]/60 pt-4">
+                      <div>
+                        {product.discountPrice > 0 ? (
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-[#3B5F43] font-bold text-base">₹{product.discountPrice}</span>
+                            <span className="text-slate-400 line-through text-xs">₹{product.price}</span>
+                          </div>
+                        ) : (
+                          <span className="text-[#3B5F43] font-bold text-base">₹{product.price}</span>
+                        )}
+                        <span className="block text-[9px] text-slate-400">Net Vol: {product.weight}</span>
+                      </div>
+                      <Link
+                        href={`/product/${product._id}`}
+                        className="inline-flex items-center justify-center rounded-md border border-[#3B5F43] text-[#3B5F43] hover:bg-[#3B5F43] hover:text-white px-3.5 py-1.5 text-xs font-semibold transition-colors shadow-sm"
+                      >
+                        View Details
+                      </Link>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="p-8 text-center bg-[#3B5F43]/5 border border-[#EBE3D5] rounded-2xl max-w-md mx-auto w-full">
+              <p className="text-slate-700 font-serif font-bold">Catalog Database Offline</p>
+              <p className="text-xs text-slate-500 mt-2">
+                Could not retrieve products from the database. Please start Docker and run seeding scripts:
+              </p>
+              <code className="block mt-3 bg-white p-2 rounded border font-mono text-[10px] text-slate-700 select-all">
+                npm run seed
+              </code>
+            </div>
+          )}
 
         </div>
       </section>

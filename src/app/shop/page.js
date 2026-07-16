@@ -5,82 +5,12 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Search, SlidersHorizontal, ArrowUpDown, Tag } from 'lucide-react';
 
-// Hardcoded fallback data in case database is not initialized yet
-const localFallbackCatalog = [
-  {
-    _id: "seed-orange",
-    name: "Orange & Vitamin C Face Wash",
-    productId: "MH104767012A",
-    category: "Face Wash",
-    description: "Orange & Vitamin C Face Wash is formulated for deep skin refreshing and pimple cleansing. Packed with Vitamin C and natural fruit extracts, it cleanses skin impurities, combats acne-causing bacteria, and restores a natural, bright skin glow.",
-    weight: "100 ML",
-    price: 299,
-    discountPrice: 249,
-    stock: 50
-  },
-  {
-    _id: "seed-aloe",
-    name: "Aloe Cucumber Face Wash",
-    productId: "MH104767013A",
-    category: "Face Wash",
-    description: "Aloe Cucumber Face Wash combines the healing properties of Aloe Vera with the cooling sensation of fresh Cucumber. This hydrating formula cleanses pimples, removes excess sebum, and deeply hydrates, leaving the skin feeling moisturized and refreshed.",
-    weight: "100 ML",
-    price: 299,
-    discountPrice: 249,
-    stock: 45
-  },
-  {
-    _id: "seed-neem",
-    name: "Neem Menthol Lemon Face Wash",
-    productId: "MH104767014A",
-    category: "Face Wash",
-    description: "Neem Menthol Lemon Face Wash is the ultimate pimple-cleansing, cooling, and oil-control formula. Neem fights acne bacteria, Lemon provides natural clarifying properties, and Menthol gives a long-lasting cooling effect.",
-    weight: "100 ML",
-    price: 299,
-    discountPrice: 249,
-    stock: 30
-  },
-  {
-    _id: "seed-ubtan",
-    name: "Keshar Ubtan Face Wash",
-    productId: "MH104767015A",
-    category: "Face Wash",
-    description: "Keshar Ubtan Face Wash brings the traditional Indian Ubtan recipe into a convenient wash. Loaded with Saffron and Kumkumadi Oil, it deeply purifies skin and brightens dark spots.",
-    weight: "100 ML",
-    price: 349,
-    discountPrice: 299,
-    stock: 40
-  },
-  {
-    _id: "seed-cream",
-    name: "Milk, Honey & Keshar Moisturising Cream",
-    productId: "MH104767016A",
-    category: "Creams & Lotions",
-    description: "Milk, Honey & Keshar Moisturising Cream is a rich face cream designed to provide intensive hydration and lock in skin moisture. Combining natural milk proteins, nourishing honey, and skin-brightening saffron.",
-    weight: "100 G",
-    price: 399,
-    discountPrice: 349,
-    stock: 25
-  },
-  {
-    _id: "seed-lotion",
-    name: "Hydrating Aqua Almond Milk Lotion",
-    productId: "MH104767017A",
-    category: "Creams & Lotions",
-    description: "Hydrating Aqua Almond Milk Lotion is a lightweight, non-sticky body and face lotion. It provides an incredible 72-hour hydration barrier. Enriched with Sweet Almond oil, Niacinamide, and Vitamin B5.",
-    weight: "100 ML",
-    price: 449,
-    discountPrice: 379,
-    stock: 35
-  }
-];
-
 function ShopContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
   // State managers
-  const [products, setProducts] = useState(localFallbackCatalog);
+  const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '');
   const [activeCategory, setActiveCategory] = useState(searchParams.get('category') || 'All');
@@ -92,12 +22,12 @@ function ShopContent() {
     setSearchQuery(searchParams.get('search') || '');
   }, [searchParams]);
 
-  // Fetch products from database API based on search and category filters
+  // Filter products based on search, category and sorting selection
   useEffect(() => {
     async function fetchFilteredProducts() {
       setLoading(true);
       try {
-        let url = '/api/products?';
+        let url = `/api/products?sortBy=${sortBy}&`;
         if (activeCategory && activeCategory !== 'All') {
           url += `category=${encodeURIComponent(activeCategory)}&`;
         }
@@ -108,52 +38,17 @@ function ShopContent() {
         const res = await fetch(url);
         const data = await res.json();
         
-        if (data.success && data.products && data.products.length > 0) {
-          let sortedProducts = [...data.products];
-          applySorting(sortedProducts);
+        if (data.success && data.products) {
+          setProducts(data.products);
         } else {
-          // Fallback filtering if database is empty/not running
-          filterLocalFallback();
+          setProducts([]);
         }
       } catch (error) {
-        console.log('Using local fallback catalog during database setup');
-        filterLocalFallback();
+        console.log('Error querying database catalog:', error);
+        setProducts([]);
       } finally {
         setLoading(false);
       }
-    }
-
-    // Local filter function for offline/no-database mode
-    function filterLocalFallback() {
-      let filtered = localFallbackCatalog.filter(p => {
-        const matchesCategory = activeCategory === 'All' || p.category === activeCategory;
-        const matchesSearch = !searchQuery || 
-          p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          p.productId.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          p.description.toLowerCase().includes(searchQuery.toLowerCase());
-        return matchesCategory && matchesSearch;
-      });
-      applySorting(filtered);
-    }
-
-    // Sort helper
-    function applySorting(list) {
-      if (sortBy === 'price-asc') {
-        list.sort((a, b) => {
-          const priceA = a.discountPrice > 0 ? a.discountPrice : a.price;
-          const priceB = b.discountPrice > 0 ? b.discountPrice : b.price;
-          return priceA - priceB;
-        });
-      } else if (sortBy === 'price-desc') {
-        list.sort((a, b) => {
-          const priceA = a.discountPrice > 0 ? a.discountPrice : a.price;
-          const priceB = b.discountPrice > 0 ? b.discountPrice : b.price;
-          return priceB - priceA;
-        });
-      } else if (sortBy === 'name-asc') {
-        list.sort((a, b) => a.name.localeCompare(b.name));
-      }
-      setProducts(list);
     }
 
     const timer = setTimeout(() => {

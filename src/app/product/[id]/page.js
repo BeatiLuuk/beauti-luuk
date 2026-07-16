@@ -5,136 +5,6 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Phone, Share2, QrCode, X, ArrowLeft, ShieldAlert, Award, Heart, CheckCircle2, ChevronRight } from 'lucide-react';
 
-// Hardcoded fallback data in case database is not initialized yet
-const localFallbackCatalog = [
-  {
-    _id: "seed-orange",
-    name: "Orange & Vitamin C Face Wash",
-    productId: "MH104767012A",
-    category: "Face Wash",
-    images: [],
-    description: "Orange & Vitamin C Face Wash is formulated for deep skin refreshing and pimple cleansing. Packed with Vitamin C and natural fruit extracts, it cleanses skin impurities, combats acne-causing bacteria, and restores a natural, bright skin glow.",
-    ingredients: "DM Water, Sodium C14 -16 olefin sulfonate, Cocamidopropyl betaine, Citrus aurantium (Orange) fruit extract, Phyllanthus emblica (Amla) fruit extract, Acrylate copolymer, Glycerine, Decyl glucoside, Triethanolamine, Xylitylglucoside (and) Anhydroxylitol (and) Xylitol, Dispersible beads, Disodium EDTA, Vitamin C, DMDM Hydantoin, Perfume, Colour CIN (15985).",
-    benefits: [
-      "Cleanses Pimples & Impurities",
-      "Refreshes & Revitalizes Skin",
-      "Smoothens Skin Texture",
-      "Improves Natural Skin Glow"
-    ],
-    howToUse: "Wet your face with water. Take a coin-sized amount on your palm. Apply all over the face. Rinse off and pat dry with a towel. For best results, use twice a day. Store below 25°C.",
-    skinType: "For All Skin Types",
-    weight: "100 ML",
-    price: 299,
-    discountPrice: 249,
-    stock: 50
-  },
-  {
-    _id: "seed-aloe",
-    name: "Aloe Cucumber Face Wash",
-    productId: "MH104767013A",
-    category: "Face Wash",
-    images: [],
-    description: "Aloe Cucumber Face Wash combines the healing properties of Aloe Vera with the cooling sensation of fresh Cucumber. This hydrating formula cleanses pimples, removes excess sebum, and deeply hydrates, leaving the skin feeling moisturized and refreshed.",
-    ingredients: "DM Water, Sodium C14-16 olefin sulfonate, Cocamidopropyl betaine, Acrylate copolymer, Cucumis sativus (Cucumber) fruit extract, Aloe barbadensis leaf extract, Glycerine, Decyl glucoside, Triethanolamine, Aquamix, Xylitylglucoside (and) Anhydroxylitol (and) Xylitol, Disodium EDTA, Colour CIN (19140, 42090), DMDM Hydantoin, Perfume.",
-    benefits: [
-      "Cleanses Pimples",
-      "Refreshes & Cools Skin",
-      "Deeply Smoothens & Softens",
-      "Improves Hydration & Glow"
-    ],
-    howToUse: "Wet your face with water. Take a coin-sized amount on your palm. Apply all over the face. Rinse off and pat dry with a towel. For best results, use twice a day. Store below 25°C.",
-    skinType: "For All Skin Types",
-    weight: "100 ML",
-    price: 299,
-    discountPrice: 249,
-    stock: 45
-  },
-  {
-    _id: "seed-neem",
-    name: "Neem Menthol Lemon Face Wash",
-    productId: "MH104767014A",
-    category: "Face Wash",
-    images: [],
-    description: "Neem Menthol Lemon Face Wash is the ultimate pimple-cleansing, cooling, and oil-control formula. Neem fights acne bacteria, Lemon provides natural clarifying properties, and Menthol gives a long-lasting cooling effect that wakes up tired skin.",
-    ingredients: "DM Water, Sodium C14 -16 olefin sulfonate, Cocamidopropyl betaine, Acrylate copolymer, Citrus limon (Lemon) fruit extract, Melia azadirachta (Neem) leaf extract, Glycerine, Decyl glucoside, Ethylene glycol mono stearate, Xylitylglucoside (and) Anhydroxylitol (and) Xylitol, Peppermint essential oil, Disodium EDTA, Menthol, DMDM Hydantoin, Colour CIN (42090).",
-    benefits: [
-      "Fights Pimple-Causing Bacteria",
-      "Intense Cooling & Refreshing",
-      "Controls Excess Oil & Shine",
-      "Improves Complexion and Glow"
-    ],
-    howToUse: "Wet your face with water. Take a coin-sized amount on your palm. Apply all over the face. Rinse off and pat dry with a towel. For best results, use twice a day. Store below 25°C.",
-    skinType: "For All Skin Types",
-    weight: "100 ML",
-    price: 299,
-    discountPrice: 249,
-    stock: 30
-  },
-  {
-    _id: "seed-keshar",
-    name: "Keshar Ubtan Face Wash",
-    productId: "MH104767015A",
-    category: "Face Wash",
-    images: [],
-    description: "Keshar Ubtan Face Wash brings the traditional Indian Ubtan recipe into a convenient wash. Loaded with Saffron (Keshar), Kumkumadi Oil, and traditional herbs, it deeply purifies skin, brightens dark spots, and reveals a glowing complexion.",
-    ingredients: "DM Water, Sodium C14-16 olefin sulfonate, Cocamidopropyl betaine, Acrylate copolymer, Glycerine, Decyl glucoside, Ethylene glycol mono stearate, Crocus sativus (Saffron) flower extract, Xylitylglucoside (and) Anhydroxylitol (and) Xylitol, Disodium EDTA, Kumkumadi oil, Ubtan powder, Phenoxyethanol (and) Ethylhexylglycerine (and) Octenidine HCl, DMDM Hydantoin, Perfume, Colour CIN (15985).",
-    benefits: [
-      "Cleanses Pimples & Marks",
-      "Brightens Skin Tone & Tanning",
-      "Smoothens Out Fine Texture",
-      "Improves Radiance & Glow"
-    ],
-    howToUse: "Wet your face with water. Take a coin-sized amount on your palm. Apply all over the face. Rinse off and pat dry with a towel. For best results, use twice a day. Store below 25°C.",
-    skinType: "For All Skin Types",
-    weight: "100 ML",
-    price: 349,
-    discountPrice: 299,
-    stock: 40
-  },
-  {
-    _id: "seed-cream",
-    name: "Milk, Honey & Keshar Moisturising Cream",
-    productId: "MH104767016A",
-    category: "Creams & Lotions",
-    images: [],
-    description: "Milk, Honey & Keshar Moisturising Cream is a rich, luxury face cream designed to provide intensive hydration and lock in skin moisture. Combining natural milk proteins, nourishing honey, and skin-brightening saffron, it provides baby-soft skin with a luminous glow.",
-    ingredients: "DM Water, Light liquid paraffin, Stearic acid, Ethylene glycol mono stearate, Petroleum jelly, Prunus amygdalus (Sweet almond) oil, PEG 100 stearate (and) Glyceryl stearate, Cetyl alcohol, Triethanolamine, Lactic acid (Milk derivative), Honey, Crocus sativus (Saffron) flower extract, Disodium EDTA, Perfume, DMDM Hydantoin, Colour CIN (19140).",
-    benefits: [
-      "Intensely Moisturises & Softens",
-      "Smoothens Fine Lines & Dry Patches",
-      "Refreshes Tired Skin Cells",
-      "Improves Luminous Skin Glow"
-    ],
-    howToUse: "Apply to slightly damp skin immediately after cleansing, ideally within three seconds, to lock in hydration. Take a pea-sized amount and gently massage it onto the face and neck using upward and outward strokes. Apply after serums and before sunscreen.",
-    skinType: "For All Skin Types",
-    weight: "100 G",
-    price: 399,
-    discountPrice: 349,
-    stock: 25
-  },
-  {
-    _id: "seed-lotion",
-    name: "Hydrating Aqua Almond Milk Lotion",
-    productId: "MH104767017A",
-    category: "Creams & Lotions",
-    images: [],
-    description: "Hydrating Aqua Almond Milk Lotion is a lightweight, non-sticky body and face lotion. It provides an incredible 72-hour hydration barrier. Enriched with real Sweet Almond oil, cooling Aloe Vera, Niacinamide, and Vitamin B5, it absorbs instantly to leave skin feeling soft and healthy.",
-    ingredients: "DM Water, Aloe barbadensis (Aloe) leaf extract, Light liquid paraffin, Stearic acid, Glycerine, Propylene glycol, Cetyl alcohol, PEG 100 stearate (and) Glyceryl stearate, Prunus amygdalus (Sweet almond) oil, Niacinamide, DL Panthenol, Disodium EDTA, Tocopheryl acetate, Lactic acid (Milk derivative), DMDM Hydantoin, Perfume.",
-    benefits: [
-      "Provides 72 Hours Hydration",
-      "Instant Non-Greasy Absorption",
-      "Non-Sticky Featherlight Texture",
-      "Maintains Soft, Healthy Looking Skin"
-    ],
-    howToUse: "Take an adequate amount of lotion and apply evenly. Massage gently in circular motions until absorbed. Use morning and evening, or as needed, to keep skin soft, smooth, and hydrated.",
-    skinType: "For All Skin Types",
-    weight: "100 ML",
-    price: 449,
-    discountPrice: 379,
-    stock: 35
-  }
-];
-
 export default function ProductDetails() {
   const { id } = useParams();
   const router = useRouter();
@@ -149,66 +19,33 @@ export default function ProductDetails() {
   const [currentUrl, setCurrentUrl] = useState('');
 
   useEffect(() => {
-    async function fetchProductData() {
+    async function fetchProductDetails() {
       if (!id) return;
       setLoading(true);
       try {
-        // Fetch current product from MongoDB API
         const res = await fetch(`/api/products/${id}`);
         const data = await res.json();
-        
         if (data.success && data.product) {
           setProduct(data.product);
-          fetchRelated(data.product);
-        } else {
-          // Fallback lookup from hardcoded local catalog
-          const localProd = localFallbackCatalog.find(p => p._id === id || p.productId === id);
-          if (localProd) {
-            setProduct(localProd);
-            fetchRelated(localProd);
-          } else {
-            router.push('/shop');
+          // Load related products
+          const relatedRes = await fetch(`/api/products?category=${encodeURIComponent(data.product.category)}`);
+          const relatedData = await relatedRes.json();
+          if (relatedData.success && relatedData.products) {
+            const filtered = relatedData.products.filter(p => p._id !== data.product._id).slice(0, 3);
+            setRelatedProducts(filtered);
           }
+        } else {
+          setProduct(null);
         }
       } catch (error) {
-        // Fallback lookup on API error
-        const localProd = localFallbackCatalog.find(p => p._id === id || p.productId === id);
-        if (localProd) {
-          setProduct(localProd);
-          fetchRelated(localProd);
-        } else {
-          router.push('/shop');
-        }
+        console.log('Error fetching product details:', error);
+        setProduct(null);
       } finally {
         setLoading(false);
       }
     }
 
-    // Related helper
-    async function fetchRelated(currentProd) {
-      try {
-        const relatedRes = await fetch(`/api/products?category=${encodeURIComponent(currentProd.category)}`);
-        const relatedData = await relatedRes.json();
-        if (relatedData.success && relatedData.products && relatedData.products.length > 0) {
-          const filtered = relatedData.products.filter(p => p._id !== currentProd._id).slice(0, 3);
-          setRelatedProducts(filtered);
-        } else {
-          loadLocalRelated(currentProd);
-        }
-      } catch (e) {
-        loadLocalRelated(currentProd);
-      }
-    }
-
-    // Offline related fallback helper
-    function loadLocalRelated(currentProd) {
-      const filtered = localFallbackCatalog
-        .filter(p => p.category === currentProd.category && p.productId !== currentProd.productId)
-        .slice(0, 3);
-      setRelatedProducts(filtered);
-    }
-
-    fetchProductData();
+    fetchProductDetails();
   }, [id, router]);
 
   useEffect(() => {
@@ -249,7 +86,26 @@ export default function ProductDetails() {
     );
   }
 
-  if (!product) return null;
+  if (!product) {
+    return (
+      <div className="mx-auto max-w-md px-4 py-32 text-center space-y-4">
+        <div className="bg-[#3B5F43]/5 border border-[#EBE3D5] p-8 rounded-2xl">
+          <h2 className="font-serif text-xl font-bold text-slate-800">Product Not Found</h2>
+          <p className="text-xs text-slate-500 mt-2">
+            The skincare item you are trying to view is not registered in the database, or the catalog database is offline.
+          </p>
+          <div className="mt-6 flex flex-col gap-2">
+            <Link
+              href="/shop"
+              className="inline-flex items-center justify-center rounded-lg bg-[#3B5F43] hover:bg-[#2A4430] text-white py-2.5 text-xs font-semibold shadow-sm"
+            >
+              Back to Catalog Shop
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
