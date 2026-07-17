@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/lib/db';
 import Product from '@/models/Product';
+import { verifySession } from '@/lib/auth';
 
 export async function GET(req) {
   try {
@@ -48,6 +49,56 @@ export async function GET(req) {
     console.error('API Error in /api/products:', error);
     return NextResponse.json(
       { success: false, error: error.message },
+      { status: 500 }
+    );
+  }
+}
+
+export async function POST(req) {
+  try {
+    // 1. Verify admin session cookie
+    const token = req.cookies.get('admin_session')?.value;
+    const session = await verifySession(token);
+    if (!session) {
+      return NextResponse.json(
+        { success: false, message: 'Unauthorized. Admin session is invalid or expired.' },
+        { status: 401 }
+      );
+    }
+
+    await connectDB();
+    const body = await req.json();
+
+    // 2. Validate required inputs
+    const { name, productId, category, description, price } = body;
+    if (!name || !productId || !category || !description || price === undefined) {
+      return NextResponse.json(
+        { success: false, message: 'Missing required product fields (name, productId, category, description, price).' },
+        { status: 400 }
+      );
+    }
+
+    // 3. Prevent duplicate SKU barcodes
+    const existing = await Product.findOne({ productId });
+    if (existing) {
+      return NextResponse.json(
+        { success: false, message: `Product ID / Barcode '${productId}' already exists.` },
+        { status: 409 }
+      );
+    }
+
+    // 4. Create new product
+    const newProduct = await Product.create(body);
+
+    return NextResponse.json({
+      success: true,
+      message: 'Product created successfully.',
+      product: newProduct
+    }, { status: 201 });
+  } catch (error) {
+    console.error('API Error in POST /api/products:', error);
+    return NextResponse.json(
+      { success: false, message: error.message },
       { status: 500 }
     );
   }
