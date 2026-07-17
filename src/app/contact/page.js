@@ -32,18 +32,25 @@ export default function Contact() {
 
     setIsSubmitting(true);
 
-    // Simulate sending message to backend
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setSuccess(true);
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        subject: '',
-        message: '',
-      });
-    }, 1000);
+    // Format the WhatsApp message body
+    const messageText = `Hi Beauti Luuk! 🌸\n\nI have a customer support query.\n\n*Name:* ${formData.name}\n*Phone:* ${formData.phone}\n${formData.email ? `*Email:* ${formData.email}\n` : ''}${formData.subject ? `*Subject:* ${formData.subject}\n` : ''}\n*Message:* ${formData.message}`;
+
+    // Construct the WhatsApp URL
+    const whatsappUrl = `https://wa.me/918655550456?text=${encodeURIComponent(messageText)}`;
+
+    // Open WhatsApp in a new tab
+    window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+
+    // Reset form and show success state
+    setIsSubmitting(false);
+    setSuccess(true);
+    setFormData({
+      name: '',
+      email: '',
+      phone: '',
+      subject: '',
+      message: '',
+    });
   };
 
   return (
