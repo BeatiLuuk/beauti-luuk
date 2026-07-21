@@ -1,11 +1,12 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Award, Leaf, Heart, ShieldCheck, ArrowRight, ShieldAlert } from 'lucide-react';
 
 export default function About() {
+  const [showCertModal, setShowCertModal] = useState(false);
   const values = [
     {
       icon: Leaf,
@@ -106,53 +107,151 @@ export default function About() {
 
       {/* 4. Manufacturing Profile & Lab Info */}
       <section className="py-20 bg-white">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 bg-[#3B5F43]/5 rounded-2xl border border-[#EBE3D5] p-8 sm:p-10 space-y-8 shadow-sm">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 space-y-12">
           
-          <div className="text-center space-y-2 border-b border-[#EBE3D5] pb-6">
-            <h2 className="font-serif text-2xl font-bold text-slate-800">Manufacturing & Lab Details</h2>
-            <p className="text-xs tracking-wider text-[#C5A880] uppercase font-bold">
-              Complete Credibility and Lab Registrations
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 text-sm">
+          <div className="mx-auto max-w-4xl bg-[#3B5F43]/5 rounded-2xl border border-[#EBE3D5] p-8 sm:p-10 space-y-8 shadow-sm">
             
-            {/* Manufacturing Lab */}
-            <div className="space-y-2">
-              <span className="block font-bold text-[#3B5F43] font-serif text-base">Manufactured By:</span>
-              <p className="font-semibold text-slate-800">Amoha Herbals Pvt. Ltd.</p>
-              <p className="text-slate-500 leading-relaxed">
-                13, Yashashree, 3/3A Karve Nagar,<br />
-                Pune, Maharashtra, India - 411052.<br />
-                <span className="text-xs text-[#C5A880]">www.amohaherbals.com</span>
-              </p>
-              <p className="text-xs text-slate-500 font-medium">
-                <strong>Mfg. Lic. No:</strong> MH/104767A
+            <div className="text-center space-y-2 border-b border-[#EBE3D5] pb-6">
+              <h2 className="font-serif text-2xl font-bold text-slate-800">Manufacturing & Lab Details</h2>
+              <p className="text-xs tracking-wider text-[#C5A880] uppercase font-bold">
+                Complete Credibility and Lab Registrations
               </p>
             </div>
 
-            {/* Marketing Partner */}
-            <div className="space-y-2">
-              <span className="block font-bold text-[#3B5F43] font-serif text-base">Marketed By:</span>
-              <p className="font-semibold text-slate-800">Unitech Corporation</p>
-              <p className="text-slate-500 leading-relaxed">
-                704/A Vatsalya CHS, RBB Marg,<br />
-                Mumbai, Maharashtra, India - 400010.
-              </p>
-              <p className="text-xs text-slate-500 font-medium">
-                <strong>ISO 9001:2015</strong> Quality Registered Standard
-              </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 text-sm">
+              
+              {/* Manufacturing Lab */}
+              <div className="space-y-2">
+                <span className="block font-bold text-[#3B5F43] font-serif text-base">Manufactured By:</span>
+                <p className="font-semibold text-slate-800">Amoha Herbals Pvt. Ltd.</p>
+                <p className="text-slate-500 leading-relaxed">
+                  13, Yashashree, 3/3A Karve Nagar,<br />
+                  Pune, Maharashtra, India - 411052.<br />
+                  <span className="text-xs text-[#C5A880]">www.amohaherbals.com</span>
+                </p>
+                <p className="text-xs text-slate-500 font-medium">
+                  <strong>Mfg. Lic. No:</strong> MH/104767A
+                </p>
+              </div>
+
+              {/* Marketing Partner */}
+              <div className="space-y-2">
+                <span className="block font-bold text-[#3B5F43] font-serif text-base">Marketed By:</span>
+                <p className="font-semibold text-slate-800">Unitech Corporation</p>
+                <p className="text-slate-500 leading-relaxed">
+                  A1 908, Trinity Paradise, Shil Gaon,<br />
+                  Kalyan Phata, Shil Kalyan Road, Thane,<br />
+                  Mumbai, Maharashtra, India - 421204.
+                </p>
+                <p className="text-xs text-slate-500 font-medium">
+                  <strong>ISO 9001:2015</strong> Quality Registered Standard
+                </p>
+              </div>
+
+            </div>
+
+            {/* Slogan callout */}
+            <div className="pt-6 border-t border-[#EBE3D5] text-center italic text-sm text-[#3B5F43] font-serif">
+              "Har Bund Me Narmi, Har Bond Me Chamak" — Softness in every drop, glow in every bond.
             </div>
 
           </div>
 
-          {/* Slogan callout */}
-          <div className="pt-6 border-t border-[#EBE3D5] text-center italic text-sm text-[#3B5F43] font-serif">
-            "Har Bund Me Narmi, Har Bond Me Chamak" — Softness in every drop, glow in every bond.
+          {/* ISO 9001:2015 Certificate Showcase Card */}
+          <div className="bg-gradient-to-br from-[#FDFBF7] to-white rounded-2xl border-2 border-[#C5A880]/40 p-6 sm:p-10 shadow-md grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+            
+            {/* Left Column: Certificate Preview Frame */}
+            <div className="md:col-span-5 flex flex-col items-center">
+              <div 
+                onClick={() => setShowCertModal(true)}
+                className="relative group cursor-pointer w-full max-w-[280px] aspect-[1/1.4] rounded-xl overflow-hidden border-2 border-[#EBE3D5] bg-white p-2 shadow-md hover:shadow-xl transition-all duration-300 hover:scale-[1.02]"
+              >
+                <Image
+                  src="/images/iso-certificate.jpg"
+                  alt="ISO 9001:2015 Certificate of Registration - Unitech Corporation"
+                  fill
+                  sizes="300px"
+                  className="object-contain p-1"
+                />
+                <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white space-y-1">
+                  <Award className="h-8 w-8 text-[#C5A880] animate-bounce" />
+                  <span className="text-xs font-bold uppercase tracking-wider">Click to Enlarge</span>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowCertModal(true)}
+                className="mt-3 inline-flex items-center text-xs font-bold text-[#3B5F43] hover:text-[#2A4430] underline cursor-pointer"
+              >
+                🔍 View Full High-Res Certificate
+              </button>
+            </div>
+
+            {/* Right Column: Certificate Details */}
+            <div className="md:col-span-7 space-y-5">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#3B5F43]/10 text-[#3B5F43] text-xs font-bold uppercase tracking-wider">
+                <Award className="h-4 w-4 text-[#C5A880]" />
+                Certified Quality Management
+              </div>
+
+              <h3 className="font-serif text-2xl sm:text-3xl font-bold text-slate-800">
+                ISO 9001:2015 Certified System
+              </h3>
+
+              <p className="text-sm text-slate-600 leading-relaxed">
+                Beauti Luuk products are marketed and distributed under **Unitech Corporation’s** Quality Management System, officially audited and registered in accordance with **ISO 9001:2015** standards.
+              </p>
+
+              <div className="bg-white p-4 rounded-xl border border-[#EBE3D5] space-y-2 text-xs text-slate-700">
+                <div className="flex justify-between border-b border-slate-100 pb-1.5">
+                  <span className="font-semibold text-slate-500">Certified Organization:</span>
+                  <span className="font-bold text-slate-800">UNITECH CORPORATION</span>
+                </div>
+                <div className="flex justify-between border-b border-slate-100 pb-1.5">
+                  <span className="font-semibold text-slate-500">Certificate Number:</span>
+                  <span className="font-bold text-[#3B5F43]">25UQLP26</span>
+                </div>
+                <div className="flex justify-between border-b border-slate-100 pb-1.5">
+                  <span className="font-semibold text-slate-500">Audit Scope:</span>
+                  <span className="font-bold text-slate-800 text-right max-w-[220px]">Cosmetics, Herbal & Ayurvedic Care</span>
+                </div>
+                <div className="flex justify-between pt-0.5">
+                  <span className="font-semibold text-slate-500">Registration Date:</span>
+                  <span className="font-bold text-slate-800">02/01/2026</span>
+                </div>
+              </div>
+            </div>
+
           </div>
 
         </div>
       </section>
+
+      {/* ISO Certificate Modal */}
+      {showCertModal && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="relative max-w-3xl w-full max-h-[90vh] bg-white rounded-2xl overflow-hidden flex flex-col shadow-2xl">
+            <div className="p-4 bg-slate-900 text-white flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <Award className="h-5 w-5 text-[#C5A880]" />
+                <span className="font-serif text-sm font-bold">ISO 9001:2015 Certificate of Registration</span>
+              </div>
+              <button 
+                onClick={() => setShowCertModal(false)}
+                className="p-1 rounded-lg hover:bg-white/10 text-white/80 hover:text-white transition-colors cursor-pointer"
+              >
+                ✕
+              </button>
+            </div>
+            <div className="relative flex-1 overflow-auto p-4 flex items-center justify-center bg-slate-100">
+              <img
+                src="/images/iso-certificate.jpg"
+                alt="ISO 9001:2015 Certificate"
+                className="max-h-[75vh] w-auto object-contain rounded border border-slate-300 shadow-md"
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* 5. Call to Action */}
       <section className="bg-slate-900 text-white py-16 text-center">

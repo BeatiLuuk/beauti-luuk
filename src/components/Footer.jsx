@@ -109,8 +109,8 @@ export default function Footer() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
           <p>© 2026 Beauti Luuk Cosmetics. Built with care in India.</p>
           <div className="flex gap-4">
-            <Link href="/about" className="hover:underline">Privacy Policy</Link>
-            <Link href="/about" className="hover:underline">Terms of Service</Link>
+            <Link href="/privacy" className="hover:underline">Privacy Policy</Link>
+            <Link href="/terms" className="hover:underline">Terms & Conditions</Link>
           </div>
         </div>
       </div>

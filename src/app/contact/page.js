@@ -33,7 +33,7 @@ export default function Contact() {
     setIsSubmitting(true);
 
     // Format the WhatsApp message body
-    const messageText = `Hi Beauti Luuk! 🌸\n\nI have a customer support query.\n\n*Name:* ${formData.name}\n*Phone:* ${formData.phone}\n${formData.email ? `*Email:* ${formData.email}\n` : ''}${formData.subject ? `*Subject:* ${formData.subject}\n` : ''}\n*Message:* ${formData.message}`;
+    const messageText = `Hi Beauti Luuk! 🌸\n\nI want to submit customer feedback.\n\n*Name:* ${formData.name}\n*Phone:* ${formData.phone}\n${formData.email ? `*Email:* ${formData.email}\n` : ''}${formData.subject ? `*Subject:* ${formData.subject}\n` : ''}\n*Feedback:* ${formData.message}`;
 
     // Construct the WhatsApp URL
     const whatsappUrl = `https://wa.me/918655550456?text=${encodeURIComponent(messageText)}`;
@@ -134,7 +134,7 @@ export default function Contact() {
             {/* Right: Contact Form */}
             <div className="lg:col-span-7 bg-white rounded-2xl border border-[#EBE3D5] p-6 sm:p-8 shadow-sm">
               <h2 className="font-serif text-2xl font-bold text-slate-800 border-b pb-3 mb-6">
-                Send Us A Message
+                Send Us Your Feedback
               </h2>
 
               {success ? (
@@ -142,15 +142,15 @@ export default function Contact() {
                   <div className="mx-auto h-12 w-12 bg-green-100 text-green-500 rounded-full flex items-center justify-center">
                     <CheckCircle2 className="h-7 w-7" />
                   </div>
-                  <h3 className="font-serif text-lg font-bold text-green-800">Message Sent Successfully!</h3>
+                  <h3 className="font-serif text-lg font-bold text-green-800">Feedback Sent Successfully!</h3>
                   <p className="text-xs text-green-700 max-w-sm mx-auto leading-relaxed">
-                    Thank you for reaching out to Beauti Luuk. Our team will review your inquiry and get back to you shortly.
+                    Thank you for sharing your feedback with Beauti Luuk. We highly value your opinion and support.
                   </p>
                   <button
                     onClick={() => setSuccess(false)}
                     className="mt-4 text-xs font-bold text-[#3B5F43] hover:underline"
                   >
-                    Send another message
+                    Send another feedback
                   </button>
                 </div>
               ) : (
@@ -209,12 +209,12 @@ export default function Contact() {
                       value={formData.subject}
                       onChange={handleInputChange}
                       className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 bg-white text-sm text-slate-700 focus:border-[#3B5F43] focus:outline-none"
-                      placeholder="What is your query about?"
+                      placeholder="What is your feedback about?"
                     />
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-xs font-bold text-slate-600 uppercase tracking-wide">Your Message *</label>
+                    <label className="text-xs font-bold text-slate-600 uppercase tracking-wide">Your Feedback *</label>
                     <textarea
                       name="message"
                       required
@@ -222,7 +222,7 @@ export default function Contact() {
                       value={formData.message}
                       onChange={handleInputChange}
                       className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 bg-white text-sm text-slate-700 focus:border-[#3B5F43] focus:outline-none"
-                      placeholder="Type your message here..."
+                      placeholder="Type your feedback details here..."
                     />
                   </div>
 
@@ -237,7 +237,7 @@ export default function Contact() {
                       ) : (
                         <>
                           <Send className="mr-2 h-4 w-4" />
-                          Send Support Inquiry
+                          Submit Feedback
                         </>
                       )}
                     </button>
