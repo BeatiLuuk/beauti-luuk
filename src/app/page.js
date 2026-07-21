@@ -5,6 +5,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Sparkles, Leaf, ArrowRight, ShieldCheck, Heart, RefreshCw, Zap } from 'lucide-react';
 
+import BannerSlider from '@/components/BannerSlider';
+
 // Fallback data in case database is not initialized yet
 export default function Home() {
   const [featuredProducts, setFeaturedProducts] = useState([]);
@@ -44,6 +46,9 @@ export default function Home() {
 
   return (
     <div className="flex flex-col w-full font-sans bg-[#FDFBF7]">
+      
+      {/* 0. Independence Day Promotional Banner Slider */}
+      <BannerSlider />
       
       {/* 1. Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-b from-[#EBE3D5]/40 via-[#FDFBF7] to-[#FDFBF7] py-20 lg:py-32">
