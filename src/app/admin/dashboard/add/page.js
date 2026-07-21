@@ -62,6 +62,35 @@ export default function AddProduct() {
     }));
   };
 
+  const [uploadingIdx, setUploadingIdx] = useState(null);
+
+  const handleFileUpload = async (index, file) => {
+    if (!file) return;
+    setUploadingIdx(index);
+
+    const uploadFormData = new FormData();
+    uploadFormData.append('file', file);
+    uploadFormData.append('upload_preset', 'ml_default');
+
+    try {
+      const res = await fetch('https://api.cloudinary.com/v1_1/vxp8medc/image/upload', {
+        method: 'POST',
+        body: uploadFormData,
+      });
+
+      const data = await res.json();
+      if (data.secure_url) {
+        handleImageChange(index, data.secure_url);
+      } else {
+        alert(data.error?.message || 'Upload Preset Error: Please make sure unsigned uploads are allowed in your Cloudinary settings or paste the URL manually.');
+      }
+    } catch (err) {
+      alert('Network connection error while uploading photo.');
+    } finally {
+      setUploadingIdx(null);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -366,40 +395,75 @@ export default function AddProduct() {
                 </div>
               </div>
 
-              {/* Cloudinary URL block */}
+              {/* Cloudinary Photo Upload & URL block */}
               <div className="bg-white p-6 rounded-2xl border border-[#EBE3D5] shadow-sm space-y-4">
                 <h2 className="text-xs font-bold text-[#C5A880] uppercase tracking-wider border-b border-[#EBE3D5] pb-2">
-                  Product Image URLs
+                  Product Image Files & URLs
                 </h2>
 
-                <div className="space-y-3">
+                <div className="space-y-4">
                   {formData.images.map((image, idx) => (
-                    <div key={idx} className="space-y-1">
-                      <div className="flex items-center gap-2">
-                        <input
-                          type="url"
-                          required={idx === 0}
-                          value={image}
-                          onChange={(e) => handleImageChange(idx, e.target.value)}
-                          placeholder="Paste Cloudinary HTTPS URL"
-                          className="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs text-slate-755 focus:border-[#3B5F43] focus:outline-none transition-colors"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => removeImageField(idx)}
-                          className="p-2 border border-slate-200 hover:bg-slate-50 text-slate-400 hover:text-slate-600 rounded-lg transition-colors cursor-pointer"
-                        >
-                          &times;
-                        </button>
+                    <div key={idx} className="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-bold text-slate-500 uppercase">Image #{idx + 1}</span>
+                        {formData.images.length > 1 && (
+                          <button
+                            type="button"
+                            onClick={() => removeImageField(idx)}
+                            className="text-xs text-rose-500 hover:text-rose-700 font-semibold cursor-pointer"
+                          >
+                            Remove
+                          </button>
+                        )}
                       </div>
+
+                      {/* Direct file selection input */}
+                      <div className="flex items-center gap-2">
+                        <label className="flex-1 cursor-pointer bg-white border border-dashed border-[#3B5F43]/40 hover:border-[#3B5F43] rounded-lg p-2.5 text-center transition-colors">
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => handleFileUpload(idx, e.target.files[0])}
+                            className="hidden"
+                          />
+                          <span className="text-xs font-semibold text-[#3B5F43] flex items-center justify-center gap-1.5">
+                            {uploadingIdx === idx ? (
+                              <>
+                                <span className="h-3 w-3 animate-spin rounded-full border-2 border-[#3B5F43] border-t-transparent" />
+                                Uploading to Cloudinary...
+                              </>
+                            ) : (
+                              '📁 Choose Image File'
+                            )}
+                          </span>
+                        </label>
+                      </div>
+
+                      {/* Text URL fallback */}
+                      <input
+                        type="url"
+                        required={idx === 0}
+                        value={image}
+                        onChange={(e) => handleImageChange(idx, e.target.value)}
+                        placeholder="Or paste Cloudinary HTTPS URL"
+                        className="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs text-slate-755 bg-white focus:border-[#3B5F43] focus:outline-none transition-colors"
+                      />
+
+                      {/* Thumbnail Preview */}
+                      {image && (
+                        <div className="relative h-16 w-16 rounded border border-slate-200 overflow-hidden bg-white mt-1">
+                          <img src={image} alt="Preview" className="h-full w-full object-contain" />
+                        </div>
+                      )}
                     </div>
                   ))}
+
                   <button
                     type="button"
                     onClick={addImageField}
                     className="w-full py-2 border border-dashed border-slate-300 hover:border-[#3B5F43] text-slate-500 hover:text-[#3B5F43] rounded-lg text-xs font-semibold transition-colors cursor-pointer"
                   >
-                    + Add Additional Photo URL
+                    + Add Another Image Slot
                   </button>
                 </div>
               </div>
