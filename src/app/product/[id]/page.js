@@ -110,6 +110,36 @@ export default function ProductDetails() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+      {/* JSON-LD Structured Schema Metadata for Search Engines (Google Lens Recognition) */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org/",
+            "@type": "Product",
+            "name": product.name,
+            "image": product.images && product.images.length > 0 ? product.images[0] : '',
+            "description": product.description,
+            "sku": product.productId,
+            "mpn": product.productId,
+            // Expose the barcode as GTIN parameter if numeric
+            ...(product.productId && /^\d+$/.test(product.productId) ? { "gtin": product.productId } : {}),
+            "brand": {
+              "@type": "Brand",
+              "name": "Beauti Luuk"
+            },
+            "offers": {
+              "@type": "Offer",
+              "url": typeof window !== 'undefined' ? window.location.href : '',
+              "priceCurrency": "INR",
+              "price": String(product.discountPrice || product.price),
+              "priceValidUntil": "2030-12-31",
+              "itemCondition": "https://schema.org/NewCondition",
+              "availability": product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock"
+            }
+          })
+        }}
+      />
       
       {/* Back button & Breadcrumbs */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
