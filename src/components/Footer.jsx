@@ -53,6 +53,32 @@ export default function Footer() {
           <p className="text-sm text-slate-400 leading-relaxed">
             Premium natural skincare and cosmetics range designed for all skin types. Pamper your skin with our refreshing formulas crafted with love in India.
           </p>
+          <div className="flex space-x-3 pt-2">
+            <a 
+              href="https://www.facebook.com/profile.php?id=61591872197181" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="p-2 bg-slate-800 rounded-full hover:bg-[#3B5F43] hover:text-white transition-all text-slate-400"
+              aria-label="Facebook"
+            >
+              <svg className="h-4 w-4 fill-current" viewBox="0 0 24 24">
+                <path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c4.56-.93 8-4.96 8-9.75z" />
+              </svg>
+            </a>
+            <a 
+              href="https://www.instagram.com/beautiluuk/" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="p-2 bg-slate-800 rounded-full hover:bg-[#3B5F43] hover:text-white transition-all text-slate-400"
+              aria-label="Instagram"
+            >
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+              </svg>
+            </a>
+          </div>
         </div>
 
         {/* Navigation links Column */}
