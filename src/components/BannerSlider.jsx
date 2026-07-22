@@ -6,11 +6,11 @@ import Link from 'next/link';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const bannerImages = [
-  'https://res.cloudinary.com/vxp8medc/image/upload/v1784636386/Gemini_Generated_Image_dro4djdro4djdro4_icxhmw.png',
-  'https://res.cloudinary.com/vxp8medc/image/upload/v1784635373/Gemini_Generated_Image_wsn69wwsn69wwsn6_ryxnbb.png',
-  'https://res.cloudinary.com/vxp8medc/image/upload/v1784635206/ChatGPT_Image_Jul_21_2026_05_20_31_PM_f518cn.png',
-  'https://res.cloudinary.com/vxp8medc/image/upload/v1784705532/ChatGPT_Image_Jul_22_2026_01_01_02_PM_ly4llp.png',
-  'https://res.cloudinary.com/vxp8medc/image/upload/v1784704657/ChatGPT_Image_Jul_22_2026_12_41_06_PM_mlvtbb.png',
+  'https://res.cloudinary.com/vxp8medc/image/upload/v1784725553/Gemini_Generated_Image_j6c9flj6c9flj6c9_jzmq4p.png',
+  'https://res.cloudinary.com/vxp8medc/image/upload/v1784725713/Gemini_Generated_Image_d47ziwd47ziwd47z_lxygp1.png',
+  'https://res.cloudinary.com/vxp8medc/image/upload/v1784725821/Gemini_Generated_Image_rcg9earcg9earcg9_rclfvp.png',
+  'https://res.cloudinary.com/vxp8medc/image/upload/v1784724597/Gemini_Generated_Image_csm8wlcsm8wlcsm8_rtrbdu.png',
+  'https://res.cloudinary.com/vxp8medc/image/upload/v1784725143/Gemini_Generated_Image_5q5nxj5q5nxj5q5n_mcm4tj.png',
 ];
 
 const transformCloudinaryUrl = (url) => {

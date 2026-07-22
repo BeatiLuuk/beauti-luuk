@@ -8,7 +8,7 @@ import { Mail, Phone, MapPin, ShieldAlert, Award, Heart } from 'lucide-react';
 export default function Footer() {
   return (
     <footer className="bg-slate-900 text-slate-300 font-sans border-t border-slate-800">
-      
+
       {/* Certifications Ribbon */}
       <div className="bg-[#3B5F43] py-6 text-white text-xs font-semibold uppercase tracking-wider">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -35,13 +35,13 @@ export default function Footer() {
 
       {/* Main Links Grid */}
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-10">
-        
+
         {/* Info Column */}
         <div className="flex flex-col space-y-4">
           <Link href="/">
-            <Image 
-              src="/images/logo.png" 
-              alt="Beauti Luuk Logo" 
+            <Image
+              src="/images/logo.png"
+              alt="Beauti Luuk Logo"
               width={150}
               height={50}
               className="h-12 w-auto object-contain bg-white/95 p-1 rounded border border-[#EBE3D5]"
@@ -54,10 +54,10 @@ export default function Footer() {
             Premium natural skincare and cosmetics range designed for all skin types. Pamper your skin with our refreshing formulas crafted with love in India.
           </p>
           <div className="flex space-x-3 pt-2">
-            <a 
-              href="https://www.facebook.com/profile.php?id=61591872197181" 
-              target="_blank" 
-              rel="noopener noreferrer" 
+            <a
+              href="https://www.facebook.com/profile.php?id=61591872197181"
+              target="_blank"
+              rel="noopener noreferrer"
               className="p-2 bg-slate-800 rounded-full hover:bg-[#3B5F43] hover:text-white transition-all text-slate-400"
               aria-label="Facebook"
             >
@@ -65,10 +65,10 @@ export default function Footer() {
                 <path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c4.56-.93 8-4.96 8-9.75z" />
               </svg>
             </a>
-            <a 
-              href="https://www.instagram.com/beautiluuk/" 
-              target="_blank" 
-              rel="noopener noreferrer" 
+            <a
+              href="https://www.instagram.com/beautiluuk/"
+              target="_blank"
+              rel="noopener noreferrer"
               className="p-2 bg-slate-800 rounded-full hover:bg-[#3B5F43] hover:text-white transition-all text-slate-400"
               aria-label="Instagram"
             >
