@@ -130,8 +130,8 @@ export default function Home() {
                 <ShieldCheck className="h-6 w-6" />
               </div>
               <div>
-                <h3 className="font-serif font-bold text-slate-800">ISO 9001 Certified</h3>
-                <p className="text-xs text-slate-500 mt-1">Strict quality standards in every single batch.</p>
+                <h3 className="font-serif font-bold text-slate-800">ISO 9001 & 14001 Certified</h3>
+                <p className="text-xs text-slate-500 mt-1">International Quality & Environmental standards.</p>
               </div>
             </div>
             <div className="flex items-start gap-4">

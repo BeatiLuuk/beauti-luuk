@@ -9,7 +9,14 @@ const bannerImages = [
   'https://res.cloudinary.com/vxp8medc/image/upload/v1784636386/Gemini_Generated_Image_dro4djdro4djdro4_icxhmw.png',
   'https://res.cloudinary.com/vxp8medc/image/upload/v1784635373/Gemini_Generated_Image_wsn69wwsn69wwsn6_ryxnbb.png',
   'https://res.cloudinary.com/vxp8medc/image/upload/v1784635206/ChatGPT_Image_Jul_21_2026_05_20_31_PM_f518cn.png',
+  'https://res.cloudinary.com/vxp8medc/image/upload/v1784705532/ChatGPT_Image_Jul_22_2026_01_01_02_PM_ly4llp.png',
+  'https://res.cloudinary.com/vxp8medc/image/upload/v1784704657/ChatGPT_Image_Jul_22_2026_12_41_06_PM_mlvtbb.png',
 ];
+
+const transformCloudinaryUrl = (url) => {
+  if (!url || !url.includes('res.cloudinary.com')) return url;
+  return url.replace('/upload/', '/upload/c_pad,b_auto,w_1920,h_550,f_auto,q_auto/');
+};
 
 export default function BannerSlider() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -49,7 +56,7 @@ export default function BannerSlider() {
           <div key={idx} className="relative w-full h-full flex-shrink-0 flex items-center justify-center bg-slate-950">
             <Link href="/shop" className="relative block w-full h-full">
               <Image
-                src={src}
+                src={transformCloudinaryUrl(src)}
                 alt={`Independence Day Special Offer Banner ${idx + 1}`}
                 fill
                 priority={idx === 0}

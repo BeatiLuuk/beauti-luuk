@@ -56,7 +56,7 @@ export default function TermsAndConditions() {
           <div className="space-y-3 border-b border-slate-100 pb-8">
             <h2 className="font-serif text-xl font-bold text-slate-800">1. Ownership & Operation</h2>
             <p>
-              This website is owned, operated, and marketed by **Unitech Corporation** (ISO 9001:2015 Certified Company), registered in Maharashtra, India. All cosmetic and skincare products listed on this platform are manufactured under approved cosmetics license parameters by **Amoha Herbals Pvt. Ltd.**
+              This website is owned, operated, and marketed by **Unitech Corporation** (ISO 9001:2015 & ISO 14001:2015 Certified Company), registered in Maharashtra, India. All cosmetic and skincare products listed on this platform are manufactured under approved cosmetics license parameters by **Amoha Herbals Pvt. Ltd.**
             </p>
           </div>
 

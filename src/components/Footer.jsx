@@ -26,8 +26,8 @@ export default function Footer() {
               <span>Cruelty-Free (No Animal Testing)</span>
             </div>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-2">
-              <ShieldAlert className="h-5 w-5 text-[#C5A880]" />
-              <span>100% External / Organic Base</span>
+              <Award className="h-5 w-5 text-[#C5A880]" />
+              <span>ISO 14001:2015 Certified</span>
             </div>
           </div>
         </div>

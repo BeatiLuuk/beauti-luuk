@@ -6,7 +6,8 @@ import Image from 'next/image';
 import { Award, Leaf, Heart, ShieldCheck, ArrowRight, ShieldAlert } from 'lucide-react';
 
 export default function About() {
-  const [showCertModal, setShowCertModal] = useState(false);
+  const [modalImage, setModalImage] = useState(null);
+  const [modalTitle, setModalTitle] = useState('');
   const values = [
     {
       icon: Leaf,
@@ -21,7 +22,7 @@ export default function About() {
     {
       icon: ShieldCheck,
       title: "GMP & ISO Certified",
-      description: "Manufactured under strict laboratory conditions (GMP and ISO 9001:2015) to guarantee clean, safe, and premium products."
+      description: "Manufactured and distributed under strict laboratory and environmental conditions (GMP, ISO 9001:2015 & ISO 14001:2015) to guarantee clean, safe, and sustainable products."
     }
   ];
 
@@ -163,7 +164,10 @@ export default function About() {
             {/* Left Column: Certificate Preview Frame */}
             <div className="md:col-span-5 flex flex-col items-center">
               <div 
-                onClick={() => setShowCertModal(true)}
+                onClick={() => {
+                  setModalImage('/images/iso-certificate.jpg');
+                  setModalTitle('ISO 9001:2015 Certificate of Registration');
+                }}
                 className="relative group cursor-pointer w-full max-w-[280px] aspect-[1/1.4] rounded-xl overflow-hidden border-2 border-[#EBE3D5] bg-white p-2 shadow-md hover:shadow-xl transition-all duration-300 hover:scale-[1.02]"
               >
                 <Image
@@ -179,7 +183,10 @@ export default function About() {
                 </div>
               </div>
               <button
-                onClick={() => setShowCertModal(true)}
+                onClick={() => {
+                  setModalImage('/images/iso-certificate.jpg');
+                  setModalTitle('ISO 9001:2015 Certificate of Registration');
+                }}
                 className="mt-3 inline-flex items-center text-xs font-bold text-[#3B5F43] hover:text-[#2A4430] underline cursor-pointer"
               >
                 🔍 View Full High-Res Certificate
@@ -227,25 +234,28 @@ export default function About() {
       </section>
 
       {/* ISO Certificate Modal */}
-      {showCertModal && (
+      {modalImage && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="relative max-w-3xl w-full max-h-[90vh] bg-white rounded-2xl overflow-hidden flex flex-col shadow-2xl">
             <div className="p-4 bg-slate-900 text-white flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <Award className="h-5 w-5 text-[#C5A880]" />
-                <span className="font-serif text-sm font-bold">ISO 9001:2015 Certificate of Registration</span>
+                <span className="font-serif text-sm font-bold">{modalTitle}</span>
               </div>
               <button 
-                onClick={() => setShowCertModal(false)}
-                className="p-1 rounded-lg hover:bg-white/10 text-white/80 hover:text-white transition-colors cursor-pointer"
+                onClick={() => {
+                  setModalImage(null);
+                  setModalTitle('');
+                }}
+                className="p-1 rounded-lg hover:bg-white/10 text-white/80 hover:text-white transition-colors cursor-pointer text-sm"
               >
-                ✕
+                ✕ Close
               </button>
             </div>
             <div className="relative flex-1 overflow-auto p-4 flex items-center justify-center bg-slate-100">
               <img
-                src="/images/iso-certificate.jpg"
-                alt="ISO 9001:2015 Certificate"
+                src={modalImage}
+                alt="ISO Certification Details"
                 className="max-h-[75vh] w-auto object-contain rounded border border-slate-300 shadow-md"
               />
             </div>
